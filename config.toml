@@ -1,0 +1,40 @@
+title = "我的 Hugo FixIt 网站"
+baseURL = "http://example.org/"
+# 设置默认的语言 ["en", "zh-cn", "fr", "pl", ...]
+defaultContentLanguage = "zh-cn"
+# 网站语言, 仅在这里 CN 大写 ["en", "zh-CN", "fr", "pl", ...]
+languageCode = "zh-CN"
+# 是否包括中日韩文字
+hasCJKLanguage = true
+
+# 更改使用 Hugo 构建网站时使用的默认主题
+theme = "FixIt"
+
+[params]
+# FixIt 主题版本
+version = "0.2.X"
+
+[menu]
+[[menu.main]]
+identifier = "posts"
+name = "文章"
+url = "/posts/"
+weight = 1
+[[menu.main]]
+identifier = "categories"
+name = "分类"
+url = "/categories/"
+title = ""
+weight = 2
+[[menu.main]]
+identifier = "tags"
+name = "标签"
+url = "/tags/"
+weight = 3
+
+# Hugo 解析文档的配置
+[markup]
+# 语法高亮设置 (https://gohugo.io/content-management/syntax-highlighting)
+[markup.highlight]
+# false 是必要的设置 (https://github.com/hugo-fixit/FixIt/issues/43)
+noClasses = false
