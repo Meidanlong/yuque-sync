@@ -96,8 +96,18 @@ def get_published_docs(exclude_books: List[str]) -> dict:
     return doc_dict
 
 
+# 1、获取公开的已发布的文档，及文档所归属的目录（标签）
 doc_dict = get_published_docs(['知识脉络'])
 print('执行成功: {}'.format(len(doc_dict)))
+# 2、比对上次留存的文档目录，分别区分新增、更新和删除。将新文档目录文件替换原文件
+
+# 3、遍历文档目录，创建不存在的目录
+
+# 4、新增、更新和删除文件，并同步到云平台
+
+# 5、发布本地博客代码，更新个人博客
+
+
 
 
 
