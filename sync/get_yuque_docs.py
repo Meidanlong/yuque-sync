@@ -1,17 +1,14 @@
+import os
 from datetime import datetime
 from typing import List
 
-import requests
-import json
 import yaml
-import os
 
-yuque_access_token = os.environ.get('yuque_access_token')
-# yuque_access_token = '8RJsszjXfqrpxbsCW8RqmgtEQsfmeiNuyPZAKME1'
+from sync.requst_api import request_repo, request_book_docs
 
-project_path = os.path.abspath(os.path.dirname(__file__))
 
-print(project_path)
+def get_content_path():
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, 'content'))
 
 
 
@@ -39,11 +36,8 @@ def get_published_docs(exclude_books: List[str]) -> dict:
 
     # 获取知识库及子目录层级
     # 知识库列表
-    books_url = 'https://www.yuque.com/api/v2/groups/meidanlong/repos'
-    params = {'offset': 0, 'limit': 100, 'type': 'Book'}
-    headers = {'accept': 'application/json', 'X-Auth-Token': yuque_access_token}
-    res = requests.get(url=books_url, headers=headers, params=params)
-    for book in json.loads(res.text)['data']:
+    books = request_repo()
+    for book in books:
         # 排除知识库
         if exclude_books.__contains__(book['name']):
             continue
@@ -74,11 +68,8 @@ def get_published_docs(exclude_books: List[str]) -> dict:
                 doc_dict.update({doc['doc_id']: DocDetail(doc_id=doc['doc_id'], title=title, tags=tags, uri=location_uri)})
 
         # 获取知识库目录详情
-        book_doc_url = 'https://www.yuque.com/api/v2/repos/{}/docs'.format(book['id'])
-        params = {'offset': 0, 'limit': 100}
-        headers = {'accept': 'application/json', 'X-Auth-Token': yuque_access_token}
-        res = requests.get(url=book_doc_url, headers=headers, params=params)
-        for doc in json.loads(res.text)['data']:
+        docs = request_book_docs(book['id'])
+        for doc in docs:
             # 如果文档不在doc_dict中记录（可能不是叶子节点），则跳过
             doc_id = doc['id']
             if not doc_dict.__contains__(doc_id):
@@ -98,8 +89,22 @@ def get_published_docs(exclude_books: List[str]) -> dict:
 
 # 1、获取公开的已发布的文档，及文档所归属的目录（标签）
 doc_dict = get_published_docs(['知识脉络'])
-print('执行成功: {}'.format(len(doc_dict)))
-# 2、比对上次留存的文档目录，分别区分新增、更新和删除。将新文档目录文件替换原文件
+print('执行成功: {}'.format([doc for doc in doc_dict.keys()]))
+# 2、直接与本地项目content下目录进行对比，分别区分新增、更新和删除。将新文档目录文件替换原文件
+content_path = get_content_path()
+for doc_detail in doc_dict.values():
+    tags = doc_detail.tags
+    # 获取文章路径
+    doc_path = content_path
+    for tag in tags:
+        doc_path = os.path.join(doc_path, tag)
+    doc_path = os.path.join(doc_path, doc_detail.title)
+    print(doc_path)
+    # 判断文章是否存在
+    if not os.path.exists(doc_path):
+        # 如果文章不存在，则获取文章详情并创建文章
+        # 问题，如何判断删除的文章？
+        pass
 
 # 3、遍历文档目录，创建不存在的目录
 
