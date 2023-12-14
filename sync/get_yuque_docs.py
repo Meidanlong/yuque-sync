@@ -4,11 +4,8 @@ from typing import List
 
 import yaml
 
+from sync.blog_editor import get_blog_content, get_blog_overview, remove_blog_and_file, get_content_path
 from sync.requst_api import request_repo, request_book_docs
-
-
-def get_content_path():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, 'content'))
 
 
 class DocDetail:
@@ -107,48 +104,11 @@ for doc_detail in doc_dict.values():
         # 问题，如何判断删除的文章？
         pass
 
-
 # 3、遍历文档目录，创建不存在的目录
 
 # 4、新增、更新和删除文件，并同步到云平台
 
 # 5、发布本地博客代码，更新个人博客
-
-
-def get_blog_content(file_path):
-    with open(file_path, 'r', encoding='utf-8') as md_file:
-        return md_file.read()
-
-
-overview_tag = '---'
-
-
-def get_blog_overview(file_content: str):
-    index_one = file_content.find(overview_tag)
-    index_two = file_content[index_one + len(overview_tag):].find(overview_tag) + len(overview_tag)
-    overview = file_content[index_one + len(overview_tag):index_two]
-    return yaml.load(overview, Loader=yaml.FullLoader)
-
-
-def remove_blog_and_file(path: str):
-    # 如果递归“content”目录则直接跳出
-    if path == get_content_path():
-        return
-    # 文件或目录不存在，则直接返回
-    if not os.path.exists(path):
-        return
-    # 判断路径是文件还是目录
-    if os.path.isfile(path):
-        # 文件：如果文件存在，则删除
-        os.remove(path)
-    elif os.path.isdir(path):
-        # 目录：如果目录为空（下面无文件），则删除该目录
-        if not os.listdir(path):
-            os.rmdir(path)
-        else:
-            return
-    # 递归调用
-    remove_blog_and_file(os.path.abspath(os.path.join(path, '..')))
 
 
 if __name__ == "__main__":
