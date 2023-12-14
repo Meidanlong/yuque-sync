@@ -11,9 +11,7 @@ def get_content_path():
     return os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, 'content'))
 
 
-
-
-class DocDetail():
+class DocDetail:
     doc_id: str
     title: str
     tags: []
@@ -21,11 +19,12 @@ class DocDetail():
     slug: str
     update_time: datetime
     type: str
+
     def __init__(self, doc_id, title, tags, uri):
-        self.doc_id=doc_id
-        self.title=title
-        self.tags=tags
-        self.uri=uri
+        self.doc_id = doc_id
+        self.title = title
+        self.tags = tags
+        self.uri = uri
 
 
 def get_published_docs(exclude_books: List[str]) -> dict:
@@ -65,7 +64,8 @@ def get_published_docs(exclude_books: List[str]) -> dict:
                 for tag in tags:
                     location_uri += "{}/".format(tag)
                 # doc_dict.update({doc['doc_id']: {'title': title, 'tags': tags, 'uri': location_uri}})
-                doc_dict.update({doc['doc_id']: DocDetail(doc_id=doc['doc_id'], title=title, tags=tags, uri=location_uri)})
+                doc_dict.update(
+                    {doc['doc_id']: DocDetail(doc_id=doc['doc_id'], title=title, tags=tags, uri=location_uri)})
 
         # 获取知识库目录详情
         docs = request_book_docs(book['id'])
@@ -82,16 +82,17 @@ def get_published_docs(exclude_books: List[str]) -> dict:
             doc_detail = doc_dict[doc_id]
             # 记录文档详情
             doc_detail.slug = doc['slug']
-            doc_detail.update_time = doc['updated_at']
+            doc_detail.update_time = datetime.strptime(doc['updated_at'], "%Y-%m-%dT%H:%M:%S.%f%z")
 
     return doc_dict
 
 
 # 1、获取公开的已发布的文档，及文档所归属的目录（标签）
-doc_dict = get_published_docs(['知识脉络'])
+doc_dict = get_published_docs(exclude_books=['知识脉络'])
 print('执行成功: {}'.format([doc for doc in doc_dict.keys()]))
-# 2、直接与本地项目content下目录进行对比，分别区分新增、更新和删除。将新文档目录文件替换原文件
+# 2、本地项目content下目录与语雀目录进行对比，分别区分删除和更新。
 content_path = get_content_path()
+
 for doc_detail in doc_dict.values():
     tags = doc_detail.tags
     # 获取文章路径
@@ -99,12 +100,13 @@ for doc_detail in doc_dict.values():
     for tag in tags:
         doc_path = os.path.join(doc_path, tag)
     doc_path = os.path.join(doc_path, doc_detail.title)
-    print(doc_path)
+    # print(doc_path)
     # 判断文章是否存在
     if not os.path.exists(doc_path):
         # 如果文章不存在，则获取文章详情并创建文章
         # 问题，如何判断删除的文章？
         pass
+
 
 # 3、遍历文档目录，创建不存在的目录
 
@@ -113,10 +115,91 @@ for doc_detail in doc_dict.values():
 # 5、发布本地博客代码，更新个人博客
 
 
+def get_blog_content(file_path):
+    with open(file_path, 'r', encoding='utf-8') as md_file:
+        return md_file.read()
 
 
+overview_tag = '---'
 
 
+def get_blog_overview(file_content: str):
+    index_one = file_content.find(overview_tag)
+    index_two = file_content[index_one + len(overview_tag):].find(overview_tag) + len(overview_tag)
+    overview = file_content[index_one + len(overview_tag):index_two]
+    return yaml.load(overview, Loader=yaml.FullLoader)
 
 
+def remove_blog_and_file(path: str):
+    # 如果递归“content”目录则直接跳出
+    if path == get_content_path():
+        return
+    # 文件或目录不存在，则直接返回
+    if not os.path.exists(path):
+        return
+    # 判断路径是文件还是目录
+    if os.path.isfile(path):
+        # 文件：如果文件存在，则删除
+        os.remove(path)
+    elif os.path.isdir(path):
+        # 目录：如果目录为空（下面无文件），则删除该目录
+        if not os.listdir(path):
+            os.rmdir(path)
+        else:
+            return
+    # 递归调用
+    remove_blog_and_file(os.path.abspath(os.path.join(path, '..')))
 
+
+if __name__ == "__main__":
+    doc_dict = get_published_docs(exclude_books=['知识脉络'])
+    content_path = get_content_path()
+
+    insert_blogs: List[DocDetail] = []
+    update_blogs: List[DocDetail] = []
+    delete_blogs: List[DocDetail] = []
+    for root, dirs, files in os.walk(content_path):
+        for file in files:
+            if file == '.DS_Store':
+                continue
+            # 获取文件路径
+            file_path = os.path.join(root, file)
+            # 获取博客内容
+            blog_content = get_blog_content(file_path)
+            # 获取博客概览
+            blog_overview = get_blog_overview(blog_content)
+            if blog_overview:
+                # 如果本地博客概览存在，则执行的操纵为删除或更新
+                try:
+                    # 获取博客概览信息
+                    # 如果本地博客不存在doc_id，或者语雀文档不包含该doc_id，则删除该文件
+                    doc_id_ = blog_overview['doc_id']
+                    yuque_blog_overview: DocDetail = doc_dict.get(doc_id_)
+                    if not yuque_blog_overview:
+                        delete_blogs.append(yuque_blog_overview)
+                        raise KeyError('yuque blog removed')
+                    # 比对时间戳，如果语雀的时间戳更新，则同样删除该文件，并记录在insert_blogs，等待后续重新创建
+                    blog_time = blog_overview['date']
+                    yuque_time = yuque_blog_overview.update_time
+                    if yuque_time > blog_time:
+                        update_blogs.append(yuque_blog_overview)
+                        raise KeyError('yuque blog updated')
+                    else:
+                        insert_blogs.append(yuque_blog_overview)
+                except KeyError as e:
+                    remove_blog_and_file(file_path)
+            else:
+                # 如果本地博客概览不存在，则表明不是所维护的博客，根据业务定义直接删除
+                remove_blog_and_file(file_path)
+
+    # 插入语雀博客
+    for doc_detail in insert_blogs:
+        print('插入博客：', doc_detail.title)
+
+    # 插入语雀博客
+    for doc_detail in update_blogs:
+        print('更新博客：', doc_detail.title)
+
+    # 插入语雀博客
+    for doc_detail in delete_blogs:
+        print('删除博客：', doc_detail.title)
