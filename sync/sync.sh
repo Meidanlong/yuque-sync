@@ -10,3 +10,8 @@ python sync/get_yuque_docs.py
 # 本地环境
 #export PYTHONPATH=../
 #python get_yuque_docs.py
+
+# 同步github
+git add .
+git commit -m "sync-job"
+git push
