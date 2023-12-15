@@ -4,24 +4,10 @@ from typing import List
 
 import yaml
 
-from sync.blog_editor import get_blog_content, get_blog_overview, remove_blog_and_file, get_content_path
+from sync.blog_editor import get_blog_content, get_blog_overview, remove_blog_and_file, get_content_path, generate_blog
+from sync.doc_pojo import DocDetail
 from sync.requst_api import request_repo, request_book_docs
 
-
-class DocDetail:
-    doc_id: str
-    title: str
-    tags: []
-    uri: str
-    slug: str
-    update_time: datetime
-    type: str
-
-    def __init__(self, doc_id, title, tags, uri):
-        self.doc_id = doc_id
-        self.title = title
-        self.tags = tags
-        self.uri = uri
 
 
 def get_published_docs(exclude_books: List[str]) -> dict:
@@ -148,6 +134,7 @@ if __name__ == "__main__":
                         insert_blogs.append(yuque_blog_overview)
                 except KeyError as e:
                     remove_blog_and_file(file_path)
+                    # pass
             else:
                 # 如果本地博客概览不存在，则表明不是所维护的博客，根据业务定义直接删除
                 remove_blog_and_file(file_path)
@@ -155,10 +142,14 @@ if __name__ == "__main__":
     # 插入语雀博客
     for doc_detail in insert_blogs:
         print('插入博客：', doc_detail.title)
+        all_blog_content = generate_blog(doc_detail)
+        print(all_blog_content)
 
     # 插入语雀博客
     for doc_detail in update_blogs:
         print('更新博客：', doc_detail.title)
+        all_blog_content = generate_blog(doc_detail)
+        print(all_blog_content)
 
     # 插入语雀博客
     for doc_detail in delete_blogs:

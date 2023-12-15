@@ -2,9 +2,16 @@ import os
 
 import yaml
 
-from sync.get_yuque_docs import DocDetail
+from sync.doc_pojo import DocDetail, DocOverview
 
 overview_tag = '---'
+
+overview_format = '''\
+---
+{overview_yml}
+---
+{blog_content}
+'''
 
 
 def get_content_path():
@@ -44,5 +51,15 @@ def remove_blog_and_file(path: str):
     remove_blog_and_file(os.path.abspath(os.path.join(path, '..')))
 
 
-def generate_blog(doc_detail: DocDetail):
-    pass
+def del_yml_useless_line(s):
+    s = s.split('\n', 1)[-1]
+    if s.find('\n') == -1:
+        return ''
+    return s.rsplit('\n', 1)[0]
+
+
+def generate_blog(doc_detail: DocDetail) -> str:
+    doc_overview = DocOverview(doc_detail)
+    overview_yml = del_yml_useless_line(yaml.dump(data=doc_overview, allow_unicode=True))
+    all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content='这是一篇博客。')
+    return all_blog_content
