@@ -3,9 +3,13 @@
 
 export yuque_access_token=8RJsszjXfqrpxbsCW8RqmgtEQsfmeiNuyPZAKME1
 
+github_token=8RJsszjXfqrpxbsCW8RqmgtEQsfmeiNuyPZAKME1
+github_url=https://github.com/Meidanlong/yuque-sync.git
+github_git=${github_url#*//}
+
 # 正式workflows
 export PYTHONPATH=./
-python sync/get_yuque_docs.py
+#python sync/get_yuque_docs.py
 
 # 本地环境
 #export PYTHONPATH=../
@@ -14,4 +18,6 @@ python sync/get_yuque_docs.py
 # 同步github
 git add .
 git commit -m "sync-job"
-git push
+git remote set-url origin 'https://'${github_token}${github_git}
+git remote -v
+#git push
