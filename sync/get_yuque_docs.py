@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
     insert_blogs: List[DocDetail] = []
     update_blogs: List[DocDetail] = []
-    delete_blogs: List[DocDetail] = []
+    delete_blogs = []
     for root, dirs, files in os.walk(content_path):
         for file in files:
             if file == '.DS_Store':
@@ -122,7 +122,7 @@ if __name__ == "__main__":
                     doc_id_ = blog_overview['doc_id']
                     yuque_blog_overview: DocDetail = doc_dict.get(doc_id_)
                     if not yuque_blog_overview:
-                        delete_blogs.append(yuque_blog_overview)
+                        delete_blogs.append(blog_overview)
                         raise KeyError('yuque blog removed')
                     # 比对时间戳，如果语雀的时间戳更新，则同样删除该文件，并记录在insert_blogs，等待后续重新创建
                     blog_time = blog_overview['date']
@@ -153,4 +153,4 @@ if __name__ == "__main__":
 
     # 插入语雀博客
     for doc_detail in delete_blogs:
-        print('删除博客：', doc_detail.title)
+        print('删除博客：', doc_detail['title'])

@@ -22,6 +22,7 @@ class DocOverview:
     tags: []
     date: datetime
     draft = False
+    # 应包含博客园文章标识
 
     def __init__(self, docDetail: DocDetail):
         self.doc_id = docDetail.doc_id
