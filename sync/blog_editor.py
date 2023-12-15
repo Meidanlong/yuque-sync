@@ -40,10 +40,12 @@ def remove_blog_and_file(path: str):
     # 判断路径是文件还是目录
     if os.path.isfile(path):
         # 文件：如果文件存在，则删除
+        print('remove file:', path)
         os.remove(path)
     elif os.path.isdir(path):
         # 目录：如果目录为空（下面无文件），则删除该目录
         if not os.listdir(path):
+            print('remove dir:', path)
             os.rmdir(path)
         else:
             return
