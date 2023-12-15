@@ -17,6 +17,6 @@ export PYTHONPATH=./
 # 同步github
 git add .
 git commit -m "sync-job"
-git remote set-url origin 'https://'${github_token}${github_git}
+git remote set-url origin 'https://'${github_token}'@'${github_git}
 #git remote -v
 git push -f
