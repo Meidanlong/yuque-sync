@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 export yuque_access_token=8RJsszjXfqrpxbsCW8RqmgtEQsfmeiNuyPZAKME1
 
 github_token=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
@@ -19,5 +18,5 @@ export PYTHONPATH=./
 git add .
 git commit -m "sync-job"
 git remote set-url origin 'https://'${github_token}${github_git}
-git remote -v
-#git push
+#git remote -v
+git push -f
