@@ -2,7 +2,7 @@
 
 export yuque_access_token=8RJsszjXfqrpxbsCW8RqmgtEQsfmeiNuyPZAKME1
 
-github_token=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
+github_token=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
 github_url=https://github.com/Meidanlong/yuque-sync.git
 github_git=${github_url#*//}
 
