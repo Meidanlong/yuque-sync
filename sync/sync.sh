@@ -19,4 +19,4 @@ git remote set-url origin 'https://'${github_token}'@'${github_git}
 git add .
 git commit -m "sync-job"
 git remote -v
-git push -f
+git git push origin master -f
