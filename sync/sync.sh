@@ -7,8 +7,8 @@ github_url=https://github.com/Meidanlong/yuque-sync.git
 github_git=${github_url#*//}
 
 # 正式workflows
-export PYTHONPATH=./
-python sync/get_yuque_docs.py
+#export PYTHONPATH=./
+#python sync/get_yuque_docs.py
 
 # 本地环境
 #export PYTHONPATH=../
