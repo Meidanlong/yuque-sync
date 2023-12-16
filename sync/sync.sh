@@ -16,6 +16,8 @@ python sync/get_yuque_docs.py
 
 # 同步github
 git remote set-url origin 'https://'${github_token}'@'${github_git}
+git config --global user.email "meidanlong@gmail.com"
+git config --global user.name "meidanlong"
 git add .
 git commit -m "sync-job"
 git remote -v
