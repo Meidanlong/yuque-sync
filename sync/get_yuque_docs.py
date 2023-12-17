@@ -4,7 +4,8 @@ from typing import List
 
 import yaml
 
-from sync.blog_editor import get_blog_content, get_blog_overview, remove_blog_and_file, get_content_path, generate_blog
+from sync.blog_editor import get_content_path
+from sync.domain.constant.contants import DATE_FORMAT
 from sync.doc_pojo import DocDetail
 from sync.requst_api import request_repo, request_book_docs
 
@@ -65,7 +66,9 @@ def get_published_docs(exclude_books: List[str]) -> dict:
             doc_detail = doc_dict[doc_id]
             # 记录文档详情
             doc_detail.slug = doc['slug']
-            doc_detail.update_time = datetime.strptime(doc['updated_at'], "%Y-%m-%dT%H:%M:%S.%f%z")
+            update_time_str = str(doc['updated_at']).replace('-', '')
+            update_time_str = update_time_str[:update_time_str.find('.')]
+            doc_detail.update_time = datetime.strptime(update_time_str, DATE_FORMAT)
 
     return doc_dict
 
