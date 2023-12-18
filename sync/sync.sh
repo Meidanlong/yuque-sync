@@ -3,6 +3,7 @@
 
 
 # 正式workflows
+export PYTHONPATH=./
 python sync/app.py
 
 # 本地环境
