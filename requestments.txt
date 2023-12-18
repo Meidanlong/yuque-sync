@@ -1,2 +1,4 @@
 pyyml
 PyGithub
+toml
+pypinyin
