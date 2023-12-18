@@ -7,7 +7,6 @@ from sync.domain.constant.contants import GET_REPO_LIST_URL, GET_BOOK_LIST_URL, 
 from sync.domain.constant.private_data import YUQUE_LOGIN, YUQUE_ACCESS_TOKEN
 
 
-
 def get_yuque_repo():
     # 知识库列表
     url = GET_REPO_LIST_URL.format(login=YUQUE_LOGIN)
@@ -21,9 +20,10 @@ def get_yuque_book(book_id: int):
     params = {'offset': 0, 'limit': 100}
     return request_yuque(url, params)
 
+
 def get_yuque_doc(book_id: int, doc_id: str):
-    url = GET_DOC_DETAIL_URL.format(book_id=book_id, id=doc_id)
-    return request_yuque(url, None)
+    url = GET_DOC_DETAIL_URL.format(book_id=book_id, id=doc_id, format='markdown')
+    return request_yuque(url, None)['body']
 
 
 def request_yuque(url: str, params: {}):

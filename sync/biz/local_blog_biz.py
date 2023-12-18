@@ -2,7 +2,7 @@ import os
 
 import yaml
 
-from sync.domain.doc_pojo import DocDetail, DocOverview
+from sync.domain.doc_detail import DocDetail
 from sync.service.cnblog_service import new_cnblog_post, update_cnblog_post
 from sync.service.github_service import push_github_origin
 from sync.service.yuque_service import get_yuque_doc
@@ -18,7 +18,8 @@ overview_format = '''\
 
 
 def get_content_path():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, 'content'))
+    return os.path.abspath(
+        os.path.join(os.path.join(os.path.dirname(__file__), os.path.pardir), os.path.pardir, 'content'))
 
 
 def get_blog_content(file_path):
@@ -32,11 +33,14 @@ def get_blog_detail(file_content: str) -> DocDetail:
     overview = file_content[index_one + len(overview_tag):index_two]
     blog_overview = yaml.load(overview, Loader=yaml.FullLoader)
     doc_detail = DocDetail()
-    doc_detail.doc_id = blog_overview['doc_id']
-    doc_detail.cnblog_id = blog_overview['cnblog_id']
-    doc_detail.title = blog_overview['title']
-    doc_detail.tags = blog_overview['tags']
-    doc_detail.update_time = blog_overview['update_time']
+    try:
+        doc_detail.doc_id = blog_overview['doc_id']
+        doc_detail.title = blog_overview['title']
+        doc_detail.tags = blog_overview['tags']
+        doc_detail.update_time = blog_overview['update_time']
+        doc_detail.cnblog_id = blog_overview['cnblog_id']
+    except KeyError as e:
+        print(e)
     return doc_detail
 
 
@@ -73,7 +77,7 @@ def del_yml_useless_line(s):
 def generate_blog(doc_detail: DocDetail) -> str:
     # 1、获取文章详情
     doc_content = get_yuque_doc(doc_detail.book_id, doc_detail.doc_id)
-    cnblog_id = DocDetail.cnblog_id
+    cnblog_id = doc_detail.cnblog_id
     if cnblog_id is not None:
         # 更新博客园
         update_cnblog_post(cnblog_id, doc_detail.title, doc_content, doc_detail.tags)
@@ -86,9 +90,10 @@ def generate_blog(doc_detail: DocDetail) -> str:
     all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content=doc_content)
     # 3、生成本地博客文件
     content_path = get_content_path()
-    relative_directory = '/'.join(doc_detail.tags)
-    file_directory = os.path.join(content_path, relative_directory)
     file_name = doc_detail.title + '.md'
+    relative_directory = '/'.join(doc_detail.tags)
+    relative_path = os.path.join(relative_directory, file_name)
+    file_directory = os.path.join(content_path, relative_directory)
     file_path = os.path.join(file_directory, file_name)
     # 检查目录是否存在，不存在则创建
     if not os.path.exists(file_directory):
@@ -98,4 +103,4 @@ def generate_blog(doc_detail: DocDetail) -> str:
         file.write(all_blog_content)
         # 4、同步github
         commit_log = 'push remote'
-        push_github_origin(file_path, all_blog_content, commit_log)
+        push_github_origin(relative_path, all_blog_content, commit_log)

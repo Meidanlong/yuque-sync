@@ -40,7 +40,7 @@ def new_cnblog_post(title, content, tags: []):
 
     post_id = get_cnblog_client().metaWeblog.newPost('', CNBLOG_USERNAME, CNBLOG_TOKEN, struct, True)
     print(f'{title}发布成功 -> {post_id}'.format(title=title, post_id=post_id))
-    time.sleep(20)  # 博客园每分钟不能发布超过3篇
+    # time.sleep(20)  # 博客园每分钟不能发布超过3篇
     return post_id
 
 

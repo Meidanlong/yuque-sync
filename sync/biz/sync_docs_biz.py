@@ -1,12 +1,13 @@
 import os
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 
 import yaml
 
-from sync.biz.local_blog_biz import get_content_path, get_blog_content, get_blog_detail, remove_blog_and_file, generate_blog
+from sync.biz.local_blog_biz import get_content_path, get_blog_content, get_blog_detail, remove_blog_and_file, \
+    generate_blog
 from sync.domain.constant.contants import DATE_FORMAT
-from sync.domain.doc_pojo import DocDetail
+from sync.domain.doc_detail import DocDetail
 from sync.service.cnblog_service import get_cnblog_recent_post, delete_cnblog_post
 from sync.service.yuque_service import get_yuque_book, get_yuque_repo
 
@@ -45,16 +46,16 @@ def get_published_docs(exclude_books: List[str]) -> dict:
                 tags.append(title)
                 content_dict.update({uuid: {'title': title, 'tags': tags, 'leaf': leaf}})
             else:
-                location_uri = ''
-                for tag in tags:
-                    location_uri += "{}/".format(tag)
+                # location_uri = ''
+                # for tag in tags:
+                #     location_uri += "{}/".format(tag)
                 # 对象包装
                 doc_detail = DocDetail()
                 doc_detail.doc_id = doc['doc_id']
                 doc_detail.book_id = book_id
                 doc_detail.title = title
                 doc_detail.tags = tags
-                doc_detail.location_uri = location_uri
+                # doc_detail.location_uri = location_uri
                 doc_dict.update({doc['doc_id']: doc_detail})
 
         # 获取知识库目录详情
@@ -71,7 +72,7 @@ def get_published_docs(exclude_books: List[str]) -> dict:
 
             doc_detail = doc_dict[doc_id]
             # 记录文档详情
-            doc_detail.slug = doc['slug']
+            # doc_detail.slug = doc['slug']
             update_time_str = str(doc['updated_at']).replace('-', '')
             update_time_str = update_time_str[:update_time_str.find('.')]
             doc_detail.update_time = datetime.strptime(update_time_str, DATE_FORMAT)
@@ -79,13 +80,13 @@ def get_published_docs(exclude_books: List[str]) -> dict:
     return doc_dict
 
 
-def compare_and_update_docs(doc_dict: dict):
+def compare_and_update_docs(doc_dict: Dict[int, DocDetail]):
     # 1、本地项目content下目录与语雀目录进行对比，分别区分删除和更新。
     content_path = get_content_path()
     # 2、遍历文档目录，查找存在差异的博客
-    insert_blogs: List[DocDetail] = doc_dict.values()
+    insert_blogs: List[DocDetail] = list(doc_dict.values())
     update_blogs: List[DocDetail] = []
-    delete_blogs = []
+    delete_blogs: List[DocDetail] = []
     # 3、获取全部博客园的博客列表
     cnblog_map = get_cnblog_recent_post()
     for root, dirs, files in os.walk(content_path):
@@ -103,7 +104,7 @@ def compare_and_update_docs(doc_dict: dict):
                 try:
                     # 获取博客概览信息
                     # 如果本地博客不存在doc_id，或者语雀文档不包含该doc_id，则删除该文件
-                    doc_id_ = local_detail['doc_id']
+                    doc_id_ = local_detail.doc_id
                     yuque_doc_detail: DocDetail = doc_dict.get(doc_id_)
                     if yuque_doc_detail is None:
                         # 博客园中存在该博客，则添加到删除列表等待被删除
@@ -114,7 +115,7 @@ def compare_and_update_docs(doc_dict: dict):
                         raise KeyError('yuque blog removed')
 
                     # 语雀中存在
-                    cnblog_id_ = local_detail['cnblog_id']
+                    cnblog_id_ = local_detail.cnblog_id
                     if cnblog_id_ is None:
                         # 使用路径+标题再次获取
                         cnblog_detail = get_cnblog_detail(local_detail, cnblog_map)
@@ -124,12 +125,14 @@ def compare_and_update_docs(doc_dict: dict):
                         cnblog_id_ = cnblog_detail['postid']
                         yuque_doc_detail.cnblog_id = cnblog_id_
                     # 比对时间戳，如果语雀的时间戳更新，则同样删除该文件，并记录在insert_blogs，等待后续重新创建
-                    blog_time = local_detail['date']
+                    blog_time = local_detail.update_time
                     yuque_time = yuque_doc_detail.update_time
                     if yuque_time > blog_time:
                         insert_blogs.remove(yuque_doc_detail)
                         update_blogs.append(yuque_doc_detail)
                         raise KeyError('yuque blog updated')
+                    else:
+                        insert_blogs.remove(yuque_doc_detail)
                 except KeyError as e:
                     print(e)
                     remove_blog_and_file(file_path)
@@ -154,15 +157,17 @@ def compare_and_update_docs(doc_dict: dict):
         delete_cnblog_post(doc_detail.cnblog_id)
 
 
-def get_cnblog_detail(blog_overview, cnblog_map):
-    tags = blog_overview['tags']
-    title = blog_overview['title']
-    cnblog_map_key = '/'.join(tags) + '@' + title
-    cnblog_detail = cnblog_map[cnblog_map_key]
-    return cnblog_detail
-
-
-if __name__ == "__main__":
-    doc_dict = get_published_docs(exclude_books=['知识脉络'])
-    compare_and_update_docs(doc_dict)
-
+def get_cnblog_detail(doc_detail, cnblog_map):
+    tags = doc_detail.tags
+    title = doc_detail.title
+    cnblog_map_key: str
+    if tags is not None:
+        cnblog_map_key = '/'.join(tags) + '@' + title
+    else:
+        cnblog_map_key = '@' + title
+    try:
+        cnblog_detail = cnblog_map[cnblog_map_key]
+        return cnblog_detail
+    except KeyError as e:
+        print(e)
+        return None
