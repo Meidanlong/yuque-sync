@@ -47,7 +47,7 @@ def new_cnblog_post(title, content, tags: []):
 def update_cnblog_post(post_id, title, content, tags: []):
     # 构建发布内容
     struct = {
-        'postid': post_id,
+        # 'postid': post_id,
         'title': title,
         'dateCreated': 0,
         'description': content,
@@ -58,7 +58,7 @@ def update_cnblog_post(post_id, title, content, tags: []):
     else:
         struct['categories'] = ['[Markdown]']
 
-    post_id = get_cnblog_client().metaWeblog.editPost('', CNBLOG_USERNAME, CNBLOG_TOKEN, struct, True)
+    post_id = get_cnblog_client().metaWeblog.editPost(post_id, CNBLOG_USERNAME, CNBLOG_TOKEN, struct, True)
     print(f'{title}更新成功 -> {post_id}'.format(title=title, post_id=post_id))
 
 

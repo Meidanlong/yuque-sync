@@ -66,7 +66,7 @@ def get_published_docs(exclude_books: List[str]) -> dict:
             if not doc_dict.__contains__(doc_id):
                 continue
             # 如果文档未发布，则移除
-            if not doc['published_at']:
+            if not doc['published_at'] and doc['status'] > 0:
                 doc_dict.pop(doc_id)
                 continue
 
@@ -141,20 +141,23 @@ def compare_and_update_docs(doc_dict: Dict[int, DocDetail]):
                 # 如果本地博客概览不存在，则表明不是所维护的博客，根据业务定义直接删除
                 remove_blog_and_file(file_path)
 
-    # 3、插入语雀博客
-    for doc_detail in insert_blogs:
-        print('插入博客：', doc_detail.title)
-        generate_blog(doc_detail)
+    # 3、删除语雀博客
+    for doc_detail in delete_blogs:
+        print('删除博客：', doc_detail['title'])
+        delete_cnblog_post(doc_detail.cnblog_id)
 
-    # 4、插入语雀博客
+    # 4、更新语雀博客
     for doc_detail in update_blogs:
         print('更新博客：', doc_detail.title)
         generate_blog(doc_detail)
 
     # 5、插入语雀博客
-    for doc_detail in delete_blogs:
-        print('删除博客：', doc_detail['title'])
-        delete_cnblog_post(doc_detail.cnblog_id)
+    for doc_detail in insert_blogs:
+        print('插入博客：', doc_detail.title)
+        cnblog_detail = get_cnblog_detail(doc_detail, cnblog_map)
+        if cnblog_detail is not None:
+            doc_detail.cnblog_id = cnblog_detail['postid']
+        generate_blog(doc_detail)
 
 
 def get_cnblog_detail(doc_detail, cnblog_map):
