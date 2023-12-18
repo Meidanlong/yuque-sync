@@ -2,7 +2,8 @@ import os
 
 import yaml
 
-from sync.doc_pojo import DocDetail, DocOverview
+from sync.domain.doc_pojo import DocDetail, DocOverview
+from sync.service.yuque_service import get_yuque_doc
 
 overview_tag = '---'
 
@@ -62,6 +63,9 @@ def del_yml_useless_line(s):
 
 def generate_blog(doc_detail: DocDetail) -> str:
     doc_overview = DocOverview(doc_detail)
+    # 1、获取文章顶部预览
     overview_yml = del_yml_useless_line(yaml.dump(data=doc_overview, allow_unicode=True))
+    # 2、获取文章详情
+    doc_content = get_yuque_doc(doc_detail.book_id, doc_detail.doc_id)
     all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content='这是一篇博客。')
     return all_blog_content

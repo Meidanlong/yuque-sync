@@ -4,11 +4,10 @@ from typing import List
 
 import yaml
 
-from sync.blog_editor import get_content_path
+from sync.biz.local_blog_biz import get_content_path, get_blog_content, get_blog_overview, remove_blog_and_file, generate_blog
 from sync.domain.constant.contants import DATE_FORMAT
-from sync.doc_pojo import DocDetail
-from sync.requst_api import request_repo, request_book_docs
-
+from sync.domain.doc_pojo import DocDetail
+from sync.service.yuque_service import get_yuque_book, get_yuque_repo
 
 
 def get_published_docs(exclude_books: List[str]) -> dict:
@@ -19,8 +18,9 @@ def get_published_docs(exclude_books: List[str]) -> dict:
 
     # 获取知识库及子目录层级
     # 知识库列表
-    books = request_repo()
+    books = get_yuque_repo()
     for book in books:
+        book_id = book['id']
         # 排除知识库
         if exclude_books.__contains__(book['name']):
             continue
@@ -47,12 +47,17 @@ def get_published_docs(exclude_books: List[str]) -> dict:
                 location_uri = ''
                 for tag in tags:
                     location_uri += "{}/".format(tag)
-                # doc_dict.update({doc['doc_id']: {'title': title, 'tags': tags, 'uri': location_uri}})
-                doc_dict.update(
-                    {doc['doc_id']: DocDetail(doc_id=doc['doc_id'], title=title, tags=tags, uri=location_uri)})
+                # 对象包装
+                doc_detail = DocDetail()
+                doc_detail.doc_id = doc['doc_id']
+                doc_detail.book_id = book_id
+                doc_detail.title = title
+                doc_detail.tags = tags
+                doc_detail.location_uri = location_uri
+                doc_dict.update({doc['doc_id']: doc_detail})
 
         # 获取知识库目录详情
-        docs = request_book_docs(book['id'])
+        docs = get_yuque_book(book_id)
         for doc in docs:
             # 如果文档不在doc_dict中记录（可能不是叶子节点），则跳过
             doc_id = doc['id']
@@ -73,37 +78,10 @@ def get_published_docs(exclude_books: List[str]) -> dict:
     return doc_dict
 
 
-# 1、获取公开的已发布的文档，及文档所归属的目录（标签）
-doc_dict = get_published_docs(exclude_books=['知识脉络'])
-print('执行成功: {}'.format([doc for doc in doc_dict.keys()]))
-# 2、本地项目content下目录与语雀目录进行对比，分别区分删除和更新。
-content_path = get_content_path()
-
-for doc_detail in doc_dict.values():
-    tags = doc_detail.tags
-    # 获取文章路径
-    doc_path = content_path
-    for tag in tags:
-        doc_path = os.path.join(doc_path, tag)
-    doc_path = os.path.join(doc_path, doc_detail.title)
-    # print(doc_path)
-    # 判断文章是否存在
-    if not os.path.exists(doc_path):
-        # 如果文章不存在，则获取文章详情并创建文章
-        # 问题，如何判断删除的文章？
-        pass
-
-# 3、遍历文档目录，创建不存在的目录
-
-# 4、新增、更新和删除文件，并同步到云平台
-
-# 5、发布本地博客代码，更新个人博客
-
-
-if __name__ == "__main__":
-    doc_dict = get_published_docs(exclude_books=['知识脉络'])
+def compare_and_update_docs(doc_dict: dict):
+    # 1、本地项目content下目录与语雀目录进行对比，分别区分删除和更新。
     content_path = get_content_path()
-
+    # 2、遍历文档目录，查找存在差异的博客
     insert_blogs: List[DocDetail] = []
     update_blogs: List[DocDetail] = []
     delete_blogs = []
@@ -136,24 +114,32 @@ if __name__ == "__main__":
                     else:
                         insert_blogs.append(yuque_blog_overview)
                 except KeyError as e:
+                    print(e)
                     remove_blog_and_file(file_path)
                     # pass
             else:
                 # 如果本地博客概览不存在，则表明不是所维护的博客，根据业务定义直接删除
                 remove_blog_and_file(file_path)
 
-    # 插入语雀博客
+    # 3、插入语雀博客
     for doc_detail in insert_blogs:
         print('插入博客：', doc_detail.title)
         all_blog_content = generate_blog(doc_detail)
         print(all_blog_content)
 
-    # 插入语雀博客
+    # 4、插入语雀博客
     for doc_detail in update_blogs:
         print('更新博客：', doc_detail.title)
         all_blog_content = generate_blog(doc_detail)
         print(all_blog_content)
 
-    # 插入语雀博客
+    # 5、插入语雀博客
     for doc_detail in delete_blogs:
         print('删除博客：', doc_detail['title'])
+
+
+
+if __name__ == "__main__":
+    doc_dict = get_published_docs(exclude_books=['知识脉络'])
+    compare_and_update_docs(doc_dict)
+

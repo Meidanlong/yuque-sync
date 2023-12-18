@@ -9,7 +9,7 @@ from sync.domain.constant.private_data import CNBLOG_METAWEBLOG_API, CNBLOG_USER
 DEFAULT_RECENT_BLOG_COUNT = 1000
 
 
-def get_recent_post() -> {}:
+def get_cnblog_recent_post() -> {}:
     client = xmlrpc.client.ServerProxy(CNBLOG_METAWEBLOG_API)
     cnblog_details = client.metaWeblog.getRecentPosts(CNBLOG_USERNAME, CNBLOG_USERNAME, CNBLOG_TOKEN,
                                                       DEFAULT_RECENT_BLOG_COUNT)
@@ -26,7 +26,7 @@ def get_recent_post() -> {}:
     return cnblog_map
 
 
-def new_post(title, content, category, keywords):
+def new_cnblog_post(title, content, category, keywords):
     # 构建发布内容
     struct = {
         'title': title,
@@ -50,5 +50,5 @@ def new_post(title, content, category, keywords):
 
 
 if __name__ == '__main__':
-    get_recent_post()
+    get_cnblog_recent_post()
     # new_post('title14', '# Content2', 'cate1', 'linux,gpu,cuda')
