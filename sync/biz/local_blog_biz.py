@@ -3,6 +3,8 @@ import os
 import yaml
 
 from sync.domain.doc_pojo import DocDetail, DocOverview
+from sync.service.cnblog_service import new_cnblog_post, update_cnblog_post
+from sync.service.github_service import push_github_origin
 from sync.service.yuque_service import get_yuque_doc
 
 overview_tag = '---'
@@ -24,11 +26,18 @@ def get_blog_content(file_path):
         return md_file.read()
 
 
-def get_blog_overview(file_content: str):
+def get_blog_detail(file_content: str) -> DocDetail:
     index_one = file_content.find(overview_tag)
     index_two = file_content[index_one + len(overview_tag):].find(overview_tag) + len(overview_tag)
     overview = file_content[index_one + len(overview_tag):index_two]
-    return yaml.load(overview, Loader=yaml.FullLoader)
+    blog_overview = yaml.load(overview, Loader=yaml.FullLoader)
+    doc_detail = DocDetail()
+    doc_detail.doc_id = blog_overview['doc_id']
+    doc_detail.cnblog_id = blog_overview['cnblog_id']
+    doc_detail.title = blog_overview['title']
+    doc_detail.tags = blog_overview['tags']
+    doc_detail.update_time = blog_overview['update_time']
+    return doc_detail
 
 
 def remove_blog_and_file(path: str):
@@ -62,10 +71,31 @@ def del_yml_useless_line(s):
 
 
 def generate_blog(doc_detail: DocDetail) -> str:
-    doc_overview = DocOverview(doc_detail)
-    # 1、获取文章顶部预览
-    overview_yml = del_yml_useless_line(yaml.dump(data=doc_overview, allow_unicode=True))
-    # 2、获取文章详情
+    # 1、获取文章详情
     doc_content = get_yuque_doc(doc_detail.book_id, doc_detail.doc_id)
-    all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content='这是一篇博客。')
-    return all_blog_content
+    cnblog_id = DocDetail.cnblog_id
+    if cnblog_id is not None:
+        # 更新博客园
+        update_cnblog_post(cnblog_id, doc_detail.title, doc_content, doc_detail.tags)
+    else:
+        # 插入博客园，获取博客园id
+        cnblog_id = new_cnblog_post(doc_detail.title, doc_content, doc_detail.tags)
+    doc_detail.cnblog_id = cnblog_id
+    # 2、拼装文章顶部预览
+    overview_yml = del_yml_useless_line(yaml.dump(data=doc_detail, allow_unicode=True))
+    all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content=doc_content)
+    # 3、生成本地博客文件
+    content_path = get_content_path()
+    relative_directory = '/'.join(doc_detail.tags)
+    file_directory = os.path.join(content_path, relative_directory)
+    file_name = doc_detail.title + '.md'
+    file_path = os.path.join(file_directory, file_name)
+    # 检查目录是否存在，不存在则创建
+    if not os.path.exists(file_directory):
+        os.makedirs(file_directory)
+    # 在指定目录创建文件，并写入内容
+    with open(file_path, 'w') as file:
+        file.write(all_blog_content)
+        # 4、同步github
+        commit_log = 'push remote'
+        push_github_origin(file_path, all_blog_content, commit_log)

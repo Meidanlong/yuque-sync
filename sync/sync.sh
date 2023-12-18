@@ -3,8 +3,8 @@
 
 # 正式workflows
 #export PYTHONPATH=./
-#python sync/get_yuque_docs.py
+#python sync/sync_docs_biz.py
 
 # 本地环境
 #export PYTHONPATH=../
-#python get_yuque_docs.py
+#python sync_docs_biz.py
