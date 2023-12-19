@@ -16,21 +16,20 @@ version = "0.2.X"
 
 [menu]
 [[menu.main]]
-identifier = "文章"
-name = "文章"
-url = "/文章/"
+identifier = "posts"
+name = "Posts"
+url = "/posts/"
 weight = 1
+[menu.main.params]
+draft = false
+icon = "fa-solid fa-archive"
 [[menu.main]]
-identifier = "categories"
-name = "分类"
-url = "/categories/"
-title = ""
-weight = 2
-#[[menu.main]]
-#identifier = "tags"
-#name = "标签"
-#url = "/tags/"
-#weight = 3
+identifier = "tags"
+name = "Tags"
+url = "/tags/"
+weight = 3
+[menu.main.params]
+icon = "fa-solid fa-tags"
 
 # Hugo 解析文档的配置
 [markup]
