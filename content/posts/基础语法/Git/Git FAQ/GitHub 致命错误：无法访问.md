@@ -1,6 +1,6 @@
 ---
 book_id: 28973507
-cnblog_id: '17912965'
+cnblog_id: 17912965
 doc_id: 131669370
 tags:
 - 基础语法
