@@ -115,6 +115,7 @@ def compare_and_update_docs(doc_dict: Dict[int, DocDetail]):
                         raise KeyError('yuque blog removed')
 
                     # 语雀中存在
+                    # 1、获取记录的博客园id进行比较
                     cnblog_id_ = local_detail.cnblog_id
                     if cnblog_id_ is None:
                         # 使用路径+标题再次获取
@@ -124,7 +125,7 @@ def compare_and_update_docs(doc_dict: Dict[int, DocDetail]):
                             raise KeyError('can not find this local blog')
                         cnblog_id_ = cnblog_detail['postid']
                         yuque_doc_detail.cnblog_id = cnblog_id_
-                    # 比对时间戳，如果语雀的时间戳更新，则同样删除该文件，并记录在insert_blogs，等待后续重新创建
+                    # 2、比对时间戳，如果语雀的时间戳更新，则同样删除该文件，并记录在insert_blogs，等待后续重新创建
                     blog_time = local_detail.update_time
                     yuque_time = yuque_doc_detail.update_time
                     if yuque_time > blog_time:
@@ -165,7 +166,8 @@ def get_cnblog_detail(doc_detail, cnblog_map):
     title = doc_detail.title
     cnblog_map_key: str
     if tags is not None:
-        cnblog_map_key = '/'.join(tags) + '@' + title
+        # 博客园对keyword进行了排序
+        cnblog_map_key = '/'.join(sorted(tags)) + '@' + title
     else:
         cnblog_map_key = '@' + title
     try:

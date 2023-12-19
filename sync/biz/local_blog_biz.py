@@ -90,7 +90,8 @@ def generate_blog(doc_detail: DocDetail) -> str:
     all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content=doc_content)
     # 3、生成本地博客文件
     content_path = get_content_posts_path()
-    file_name = doc_detail.title + '.md'
+    # 特殊处理：文件目录中有'/'替换为空格，否则会找不到路径
+    file_name = doc_detail.title.replace('/', ' ') + '.md'
     relative_directory = '/'.join(doc_detail.tags)
     relative_path = os.path.join(relative_directory, file_name)
     file_directory = os.path.join(content_path, relative_directory)

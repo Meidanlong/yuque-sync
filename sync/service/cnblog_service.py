@@ -1,6 +1,5 @@
 import json
 import xmlrpc.client
-import time
 from datetime import datetime
 
 from sync.domain.constant.contants import DATE_FORMAT
@@ -47,7 +46,6 @@ def new_cnblog_post(title, content, tags: []):
 def update_cnblog_post(post_id, title, content, tags: []):
     # 构建发布内容
     struct = {
-        # 'postid': post_id,
         'title': title,
         'dateCreated': 0,
         'description': content,
