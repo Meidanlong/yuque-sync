@@ -17,9 +17,9 @@ overview_format = '''\
 '''
 
 
-def get_content_path():
+def get_content_posts_path():
     return os.path.abspath(
-        os.path.join(os.path.join(os.path.dirname(__file__), os.path.pardir), os.path.pardir, 'content'))
+        os.path.join(os.path.join(os.path.dirname(__file__), os.path.pardir), os.path.pardir, 'content/posts'))
 
 
 def get_blog_content(file_path):
@@ -46,7 +46,7 @@ def get_blog_detail(file_content: str) -> DocDetail:
 
 def remove_blog_and_file(path: str):
     # 如果递归“content”目录则直接跳出
-    if path == get_content_path():
+    if path == get_content_posts_path():
         return
     # 文件或目录不存在，则直接返回
     if not os.path.exists(path):
@@ -89,7 +89,7 @@ def generate_blog(doc_detail: DocDetail) -> str:
     overview_yml = del_yml_useless_line(yaml.dump(data=doc_detail, allow_unicode=True))
     all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content=doc_content)
     # 3、生成本地博客文件
-    content_path = get_content_path()
+    content_path = get_content_posts_path()
     file_name = doc_detail.title + '.md'
     relative_directory = '/'.join(doc_detail.tags)
     relative_path = os.path.join(relative_directory, file_name)

@@ -4,7 +4,7 @@ from typing import List, Dict
 
 import yaml
 
-from sync.biz.local_blog_biz import get_content_path, get_blog_content, get_blog_detail, remove_blog_and_file, \
+from sync.biz.local_blog_biz import get_content_posts_path, get_blog_content, get_blog_detail, remove_blog_and_file, \
     generate_blog
 from sync.domain.constant.contants import DATE_FORMAT
 from sync.domain.doc_detail import DocDetail
@@ -82,7 +82,7 @@ def get_published_docs(exclude_books: List[str]) -> dict:
 
 def compare_and_update_docs(doc_dict: Dict[int, DocDetail]):
     # 1、本地项目content下目录与语雀目录进行对比，分别区分删除和更新。
-    content_path = get_content_path()
+    content_path = get_content_posts_path()
     # 2、遍历文档目录，查找存在差异的博客
     insert_blogs: List[DocDetail] = list(doc_dict.values())
     update_blogs: List[DocDetail] = []
