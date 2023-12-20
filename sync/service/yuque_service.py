@@ -3,7 +3,7 @@ import os
 import requests
 import json
 
-from sync.domain.constant.contants import GET_REPO_LIST_URL, GET_BOOK_LIST_URL, GET_DOC_DETAIL_URL
+from sync.domain.constant.contants import GET_REPO_LIST_URL, GET_BOOK_LIST_URL, GET_DOC_DETAIL_URL, GET_USR_URL
 from sync.domain.constant.private_data import YUQUE_LOGIN, YUQUE_ACCESS_TOKEN
 
 
@@ -26,7 +26,15 @@ def get_yuque_doc(book_id: int, doc_id: str):
     return request_yuque(url, None)['body']
 
 
+def get_yuque_user_id():
+    return request_yuque(GET_USR_URL, None)
+
+
 def request_yuque(url: str, params: {}):
     headers = {'accept': 'application/json', 'X-Auth-Token': YUQUE_ACCESS_TOKEN}
     res = requests.get(url=url, headers=headers, params=params)
     return json.loads(res.text)['data']
+
+
+if __name__ == '__main__':
+    print(get_yuque_user_id())
