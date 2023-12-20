@@ -4,6 +4,7 @@ from xmlrpc.client import Fault
 import yaml
 
 from sync.domain.constant.contants import TARGET_DIR, OS_SEP
+from sync.domain.constant.private_data import REPO_BRANCH, REPO_NAME
 from sync.domain.doc_detail import DocDetail
 from sync.service.cnblog_service import new_cnblog_post, update_cnblog_post
 from sync.service.github_service import push_github_origin
@@ -107,6 +108,6 @@ def generate_blog(doc_detail: DocDetail) -> str:
             file.write(all_blog_content)
             # 4、同步github
             commit_log = 'push remote'
-            push_github_origin(relative_path, all_blog_content, commit_log)
+            push_github_origin(REPO_NAME, REPO_BRANCH, relative_path, all_blog_content, commit_log)
     except Fault as e:
         print(e)
