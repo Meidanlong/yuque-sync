@@ -6,7 +6,7 @@ import yaml
 
 from sync.biz.local_blog_biz import get_content_posts_path, get_blog_content, get_blog_detail, remove_blog_and_file, \
     generate_blog
-from sync.domain.constant.contants import DATE_FORMAT
+from sync.domain.constant.contants import DATE_FORMAT, OS_SEP, EXCLUDE_FILES
 from sync.domain.doc_detail import DocDetail
 from sync.service.cnblog_service import get_cnblog_recent_post, delete_cnblog_post
 from sync.service.yuque_service import get_yuque_book, get_yuque_repo
@@ -91,7 +91,7 @@ def compare_and_update_docs(doc_dict: Dict[int, DocDetail]):
     cnblog_map = get_cnblog_recent_post()
     for root, dirs, files in os.walk(content_path):
         for file in files:
-            if file == '.DS_Store':
+            if EXCLUDE_FILES.__contains__(file):
                 continue
             # 获取文件路径
             file_path = os.path.join(root, file)
@@ -167,7 +167,7 @@ def get_cnblog_detail(doc_detail, cnblog_map):
     cnblog_map_key: str
     if tags is not None:
         # 博客园对keyword进行了排序
-        cnblog_map_key = '/'.join(sorted(tags)) + '@' + title
+        cnblog_map_key = OS_SEP.join(sorted(tags)) + '@' + title
     else:
         cnblog_map_key = '@' + title
     try:

@@ -3,6 +3,7 @@ from xmlrpc.client import Fault
 
 import yaml
 
+from sync.domain.constant.contants import TARGET_DIR, OS_SEP
 from sync.domain.doc_detail import DocDetail
 from sync.service.cnblog_service import new_cnblog_post, update_cnblog_post
 from sync.service.github_service import push_github_origin
@@ -20,7 +21,7 @@ overview_format = '''\
 
 def get_content_posts_path():
     return os.path.abspath(
-        os.path.join(os.path.join(os.path.dirname(__file__), os.path.pardir), os.path.pardir, 'content/posts'))
+        os.path.join(os.path.join(os.path.dirname(__file__), os.path.pardir), os.path.pardir, TARGET_DIR))
 
 
 def get_blog_content(file_path):
@@ -94,7 +95,7 @@ def generate_blog(doc_detail: DocDetail) -> str:
         content_path = get_content_posts_path()
         # 特殊处理：文件目录中有'/'替换为空格，否则会找不到路径
         file_name = doc_detail.title.replace('/', ' ') + '.md'
-        relative_directory = '/'.join(doc_detail.tags)
+        relative_directory = OS_SEP.join(doc_detail.tags)
         relative_path = os.path.join(relative_directory, file_name)
         file_directory = os.path.join(content_path, relative_directory)
         file_path = os.path.join(file_directory, file_name)

@@ -2,7 +2,7 @@ import json
 import xmlrpc.client
 from datetime import datetime
 
-from sync.domain.constant.contants import DATE_FORMAT
+from sync.domain.constant.contants import DATE_FORMAT, OS_SEP
 from sync.domain.constant.private_data import CNBLOG_METAWEBLOG_API, CNBLOG_USERNAME, CNBLOG_TOKEN
 
 DEFAULT_RECENT_BLOG_COUNT = 1000
@@ -16,7 +16,7 @@ def get_cnblog_recent_post() -> {}:
     for cnblog in cnblog_details:
         xml_rpc_time = cnblog['dateCreated']
         cnblog['dateCreated'] = datetime.strptime(xml_rpc_time.value, DATE_FORMAT)  # string
-        tags = str(cnblog['mt_keywords']).replace(',', '/')
+        tags = str(cnblog['mt_keywords']).replace(',', OS_SEP)
         cnblog_map.update({tags + "@" + cnblog['title']: cnblog})
 
     print(json.dumps(cnblog_map, default=str))
@@ -32,7 +32,8 @@ def new_cnblog_post(title, content, tags: []):
         'description': content,
     }
     if tags is not None:
-        struct['categories'] = ['[Markdown]', '/'.join(tags)]
+        # 切换操作系统会造成混乱
+        struct['categories'] = ['[Markdown]', OS_SEP.join(tags)]
         struct['mt_keywords'] = ','.join(tags)
     else:
         struct['categories'] = ['[Markdown]']
@@ -51,7 +52,7 @@ def update_cnblog_post(post_id, title, content, tags: []):
         'description': content,
     }
     if tags is not None:
-        struct['categories'] = ['[Markdown]', '/'.join(tags)]
+        struct['categories'] = ['[Markdown]', OS_SEP.join(tags)]
         struct['mt_keywords'] = ','.join(tags)
     else:
         struct['categories'] = ['[Markdown]']
