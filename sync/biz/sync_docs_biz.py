@@ -46,17 +46,14 @@ def get_published_docs(exclude_books: List[str]) -> dict:
                 tags.append(title)
                 content_dict.update({uuid: {'title': title, 'tags': tags, 'leaf': leaf}})
             else:
-                # location_uri = ''
-                # for tag in tags:
-                #     location_uri += "{}/".format(tag)
                 # 对象包装
                 doc_detail = DocDetail()
                 doc_detail.doc_id = doc['doc_id']
                 doc_detail.book_id = book_id
                 doc_detail.title = title
                 doc_detail.tags = tags
-                # doc_detail.location_uri = location_uri
                 doc_dict.update({doc['doc_id']: doc_detail})
+                print('doc_dict add', doc['doc_id'])
 
         # 获取知识库目录详情
         docs = get_yuque_book(book_id)
@@ -66,13 +63,16 @@ def get_published_docs(exclude_books: List[str]) -> dict:
             if not doc_dict.__contains__(doc_id):
                 continue
             # 如果文档未发布，则移除
-            if not doc['published_at'] and doc['status'] > 0:
+            if (doc['published_at'] is None or doc['updated_at'] is None
+                    or doc['public'] == 0 or doc['status'] == 0):
+                # public	公开性(0:私密, 1:公开, 2:企业内公开)
+                # status	状态(0:草稿, 1:发布)
                 doc_dict.pop(doc_id)
+                print('doc_dict pop', doc_id)
                 continue
 
             doc_detail = doc_dict[doc_id]
             # 记录文档详情
-            # doc_detail.slug = doc['slug']
             update_time_str = str(doc['updated_at']).replace('-', '')
             update_time_str = update_time_str[:update_time_str.find('.')]
             doc_detail.update_time = datetime.strptime(update_time_str, DATE_FORMAT)
@@ -144,7 +144,7 @@ def compare_and_update_docs(doc_dict: Dict[int, DocDetail]):
 
     # 3、删除语雀博客
     for doc_detail in delete_blogs:
-        print('删除博客：', doc_detail['title'])
+        print('删除博客：', doc_detail.title)
         delete_cnblog_post(doc_detail.cnblog_id)
 
     # 4、更新语雀博客
