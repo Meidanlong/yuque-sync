@@ -1,10 +1,7 @@
 import os
-from typing import List
 
 import toml
 from pypinyin import lazy_pinyin
-
-from sync.domain.doc_detail import DocDetail
 
 
 def get_hugo_config():
@@ -12,6 +9,7 @@ def get_hugo_config():
     with open(config_path, 'r') as file:
         config = toml.load(file)
         print(config['menu']['main'])
+
 
 def hugo_path_config(tags: list):
     dir_list = []
@@ -25,8 +23,6 @@ def hugo_path_config(tags: list):
         }
     }
 
+
 def convert_to_pinyin(s):
     return ''.join(lazy_pinyin(s))
-
-# get_hugo_config()
-print(hugo_path_config(['1','a/d','wer,wer']))

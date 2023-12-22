@@ -2,8 +2,7 @@ import os
 
 from github import Github, UnknownObjectException
 
-from sync.domain.constant.contants import TARGET_DIR
-from sync.domain.constant.private_data import GITHUB_TOKEN
+from sync.domain.constant.contants import TARGET_DIR, GITHUB_TOKEN
 
 
 def get_github_repo(repo_name:str):

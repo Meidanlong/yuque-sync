@@ -2,8 +2,8 @@ import json
 import xmlrpc.client
 from datetime import datetime
 
-from sync.domain.constant.contants import DATE_FORMAT, OS_SEP
-from sync.domain.constant.private_data import CNBLOG_METAWEBLOG_API, CNBLOG_USERNAME, CNBLOG_TOKEN
+from sync.domain.constant.contants import DATE_FORMAT, OS_SEP, CNBLOG_TOKEN
+from sync.domain.constant.private_data import CNBLOG_METAWEBLOG_API, CNBLOG_USERNAME
 
 DEFAULT_RECENT_BLOG_COUNT = 1000
 
@@ -68,9 +68,3 @@ def delete_cnblog_post(cnblog_id: int):
 def get_cnblog_client():
     client = xmlrpc.client.ServerProxy(CNBLOG_METAWEBLOG_API)
     return client
-
-
-if __name__ == '__main__':
-    # get_cnblog_recent_post()
-    # new_post('title14', '# Content2', 'cate1', 'linux,gpu,cuda')
-    delete_cnblog_post(17848517)

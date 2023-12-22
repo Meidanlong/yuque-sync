@@ -3,8 +3,6 @@ from xmlrpc.client import Fault
 
 import yaml
 
-from sync.domain.constant.contants import TARGET_DIR, OS_SEP
-from sync.domain.constant.private_data import REPO_BRANCH, REPO_NAME
 from sync.domain.doc_detail import DocDetail
 from sync.service.cnblog_service import new_cnblog_post, update_cnblog_post
 from sync.service.github_service import push_github_origin
@@ -22,7 +20,7 @@ overview_format = '''\
 
 def get_content_posts_path():
     return os.path.abspath(
-        os.path.join(os.path.join(os.path.dirname(__file__), os.path.pardir), os.path.pardir, TARGET_DIR))
+        os.path.join(os.path.join(os.path.dirname(__file__), os.path.pardir), os.path.pardir, 'content/posts'))
 
 
 def get_blog_content(file_path):
@@ -78,36 +76,40 @@ def del_yml_useless_line(s):
 
 
 def generate_blog(doc_detail: DocDetail) -> str:
+    # 1、获取文章详情
+    doc_content = get_yuque_doc(doc_detail.book_id, doc_detail.doc_id)
+    cnblog_id = doc_detail.cnblog_id
     try:
-        # 1、获取文章详情
-        doc_content = get_yuque_doc(doc_detail.book_id, doc_detail.doc_id)
-        cnblog_id = doc_detail.cnblog_id
         if cnblog_id is not None:
             # 更新博客园
             update_cnblog_post(cnblog_id, doc_detail.title, doc_content, doc_detail.tags)
         else:
             # 插入博客园，获取博客园id
             cnblog_id = new_cnblog_post(doc_detail.title, doc_content, doc_detail.tags)
-        doc_detail.cnblog_id = cnblog_id
-        # 2、拼装文章顶部预览
-        overview_yml = del_yml_useless_line(yaml.dump(data=doc_detail, allow_unicode=True))
-        all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content=doc_content)
-        # 3、生成本地博客文件
-        content_path = get_content_posts_path()
-        # 特殊处理：文件目录中有'/'替换为空格，否则会找不到路径
-        file_name = doc_detail.title.replace('/', ' ') + '.md'
-        relative_directory = OS_SEP.join(doc_detail.tags)
-        relative_path = os.path.join(relative_directory, file_name)
-        file_directory = os.path.join(content_path, relative_directory)
-        file_path = os.path.join(file_directory, file_name)
-        # 检查目录是否存在，不存在则创建
-        if not os.path.exists(file_directory):
-            os.makedirs(file_directory)
-        # 在指定目录创建文件，并写入内容
-        with open(file_path, 'w') as file:
-            file.write(all_blog_content)
-            # 4、同步github
-            commit_log = 'push remote'
-            push_github_origin(REPO_NAME, REPO_BRANCH, relative_path, all_blog_content, commit_log)
     except Fault as e:
         print(e)
+    doc_detail.cnblog_id = cnblog_id
+    # 2、拼装文章顶部预览
+    overview_yml = del_yml_useless_line(yaml.dump(data=doc_detail, allow_unicode=True))
+    all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content=doc_content)
+    # 3、生成本地博客文件
+    content_path = get_content_posts_path()
+    # 特殊处理：文件目录中有'/'替换为空格，否则会找不到路径
+    file_name = special_file_name(doc_detail.title) + '.md'
+    relative_directory = '/'.join(doc_detail.tags)
+    relative_path = os.path.join(relative_directory, file_name)
+    file_directory = os.path.join(content_path, relative_directory)
+    file_path = os.path.join(file_directory, file_name)
+    # 检查目录是否存在，不存在则创建
+    if not os.path.exists(file_directory):
+        os.makedirs(file_directory)
+    # 在指定目录创建文件，并写入内容
+    with open(file_path, 'w') as file:
+        file.write(all_blog_content)
+        # 4、同步github
+        commit_log = 'push remote'
+        push_github_origin(relative_path, all_blog_content, commit_log)
+
+
+def special_file_name(file_name):
+    return file_name.replace('/', ' ').replace('*', '')
