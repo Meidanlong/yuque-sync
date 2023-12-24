@@ -1,9 +1,13 @@
 import json
+from datetime import datetime
+from typing import List
 
 import requests
+import yaml
 
 from sync.domain.constant.contants import GET_REPO_LIST_URL, GET_BOOK_LIST_URL, GET_DOC_DETAIL_URL, GET_USR_URL, \
-    YUQUE_ACCESS_TOKEN
+    YUQUE_ACCESS_TOKEN, DATE_FORMAT
+from sync.domain.doc_detail import DocDetail
 
 
 def get_yuque_repo():

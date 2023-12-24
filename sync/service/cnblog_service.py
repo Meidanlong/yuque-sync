@@ -1,9 +1,9 @@
-import json
 import xmlrpc.client
 from datetime import datetime
 
 from sync.domain.constant.contants import DATE_FORMAT, OS_SEP, CNBLOG_TOKEN
 from sync.domain.constant.private_data import CNBLOG_METAWEBLOG_API, CNBLOG_USERNAME
+from sync.domain.doc_detail import DocDetail
 
 DEFAULT_RECENT_BLOG_COUNT = 1000
 
@@ -18,9 +18,6 @@ def get_cnblog_recent_post() -> {}:
         cnblog['dateCreated'] = datetime.strptime(xml_rpc_time.value, DATE_FORMAT)  # string
         tags = str(cnblog['mt_keywords']).replace(',', OS_SEP)
         cnblog_map.update({tags + "@" + cnblog['title']: cnblog})
-
-    print(json.dumps(cnblog_map, default=str))
-
     return cnblog_map
 
 
@@ -40,7 +37,6 @@ def new_cnblog_post(title, content, tags: []):
 
     post_id = get_cnblog_client().metaWeblog.newPost('', CNBLOG_USERNAME, CNBLOG_TOKEN, struct, True)
     print(f'{title}发布成功 -> {post_id}'.format(title=title, post_id=post_id))
-    # time.sleep(20)  # 博客园每分钟不能发布超过3篇
     return post_id
 
 
@@ -68,3 +64,11 @@ def delete_cnblog_post(cnblog_id: int):
 def get_cnblog_client():
     client = xmlrpc.client.ServerProxy(CNBLOG_METAWEBLOG_API)
     return client
+
+
+def get_cnblog_key(doc_detail: DocDetail):
+    cnblog_map_key: str
+    if doc_detail.tags is not None:
+        # 博客园对keyword进行了排序
+        cnblog_map_key = OS_SEP.join(sorted(doc_detail.tags))
+    cnblog_map_key += '@' + doc_detail.title

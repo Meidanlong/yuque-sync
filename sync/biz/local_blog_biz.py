@@ -111,5 +111,36 @@ def generate_blog(doc_detail: DocDetail) -> str:
         push_github_origin(relative_path, all_blog_content, commit_log)
 
 
+def insert_local_doc(doc_detail: DocDetail):
+    return upsert_local_doc(doc_detail)
+
+
+def update_local_doc(doc_detail: DocDetail):
+    return upsert_local_doc(doc_detail)
+
+
+def upsert_local_doc(doc_detail: DocDetail):
+    # 1、拼装文章
+    overview_yml = del_yml_useless_line(yaml.dump(data=doc_detail, allow_unicode=True))
+    all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content=doc_detail.content)
+    # 2、生成本地博客文件
+    content_path = get_content_posts_path()
+    # 特殊处理：文件目录中有'/'替换为空格，否则会找不到路径
+    file_name = special_file_name(doc_detail.title) + '.md'
+    relative_directory = '/'.join(doc_detail.tags)
+    relative_path = os.path.join(relative_directory, file_name)
+    file_directory = os.path.join(content_path, relative_directory)
+    file_path = os.path.join(file_directory, file_name)
+    # 检查目录是否存在，不存在则创建
+    if not os.path.exists(file_directory):
+        os.makedirs(file_directory)
+    # 在指定目录创建文件，并写入内容
+    with open(file_path, 'w') as file:
+        file.write(all_blog_content)
+        # 3、同步github
+        commit_log = 'push remote'
+        push_github_origin(relative_path, all_blog_content, commit_log)
+
+
 def special_file_name(file_name):
     return file_name.replace('/', ' ').replace('*', '')

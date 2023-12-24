@@ -8,7 +8,6 @@ class DocDetail:
     cnblog_id: int = None
     title: str = None
     tags: [] = None
-    # uri: str = None
-    # slug: str = None
     update_time: datetime = None
     draft = False
+    content: str

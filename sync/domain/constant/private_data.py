@@ -1,5 +1,3 @@
-import os
-
 # 博客园个人信息
 CNBLOG_USERNAME = ''  # 博客用户名
 CNBLOG_METAWEBLOG_API = ''  # 博客metaweblog api地址
