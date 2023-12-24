@@ -25,12 +25,14 @@ def sync_local(yuque_doc_dict: Dict[int, DocDetail]):
             if local_doc_detail is None:
                 # 3.1、本地博客不存在博客信息，则直接删除
                 remove_blog_and_file(local_file_path)
+                print('sync_local-[local_doc_detail is None]-remove: ', local_file_path)
                 continue
             # 本地博客存在博客信息，则获取语雀博客信息
             yuque_doc_detail: DocDetail = yuque_doc_dict.get(local_doc_detail.doc_id)
             if yuque_doc_detail is None:
                 # 3.2、如果语雀中不存在该博客，则表明已从语雀中删除，故删除本地文件
                 remove_blog_and_file(local_file_path)
+                print('sync_local-[yuque_doc_detail is None]-remove: ', local_file_path)
                 continue
             # 本地博客存在 且 语雀博客存在
             local_update_time = local_doc_detail.update_time
@@ -40,9 +42,11 @@ def sync_local(yuque_doc_dict: Dict[int, DocDetail]):
                 update_local_doc(yuque_doc_detail)
                 # 维护
                 insert_doc_list.remove(yuque_doc_detail)
+                print('sync_local-update: ', local_file_path)
     # 4、插入（本地没有的博客）剩余博客
     for doc_detail in insert_doc_list:
         insert_local_doc(doc_detail)
+        print('sync_local-insert: ', doc_detail.title)
 
 
 def sync_cnblog(yuque_doc_dict: Dict[int, DocDetail]):
@@ -56,6 +60,7 @@ def sync_cnblog(yuque_doc_dict: Dict[int, DocDetail]):
         if cnblog_doc is None:
             # 3.1、如果博客园不存在该博客，则新增
             new_cnblog_post(yuque_doc_detail.title, yuque_doc_detail.content, yuque_doc_detail.tags)
+            print('sync_cnblog-insert: ', yuque_doc_detail.title)
         cnblog_update_time = cnblog_doc.get('dateCreated', None)
         yuque_update_time = yuque_doc_detail.update_time
         if cnblog_update_time is None or yuque_update_time > cnblog_update_time:
@@ -64,9 +69,11 @@ def sync_cnblog(yuque_doc_dict: Dict[int, DocDetail]):
                                yuque_doc_detail.tags)
             # 维护
             delete_doc_list.remove(cnblog_doc)
+            print('sync_cnblog-update: ', yuque_doc_detail.title)
     # 4、语雀中不存在的博客进行删除
     for cnblog_doc in delete_doc_list:
         delete_cnblog_post(cnblog_doc['post_id'])
+        print('sync_cnblog-delete: ', cnblog_doc['title'])
 
 
 def compare_and_update_docs(yuque_doc_dict: Dict[int, DocDetail]):

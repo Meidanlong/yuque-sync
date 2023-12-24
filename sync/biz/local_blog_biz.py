@@ -3,6 +3,7 @@ from xmlrpc.client import Fault
 
 import yaml
 
+from sync.domain.constant.private_data import REPO_NAME, REPO_BRANCH
 from sync.domain.doc_detail import DocDetail
 from sync.service.cnblog_service import new_cnblog_post, update_cnblog_post
 from sync.service.github_service import push_github_origin
@@ -139,7 +140,7 @@ def upsert_local_doc(doc_detail: DocDetail):
         file.write(all_blog_content)
         # 3、同步github
         commit_log = 'push remote'
-        push_github_origin(relative_path, all_blog_content, commit_log)
+        push_github_origin(REPO_NAME, REPO_BRANCH, relative_path, all_blog_content, commit_log)
 
 
 def special_file_name(file_name):
