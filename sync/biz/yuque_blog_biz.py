@@ -57,6 +57,7 @@ def get_yuque_published_docs(exclude_books: List[str]) -> dict:
                 doc_detail.tags = tags
                 # 获取博客内容
                 doc_content = get_yuque_doc(book_id, doc_id)
+                print('get_yuque_doc: book_id={book_id}, doc_id={doc_id}'.format(book_id=book_id, doc_id=doc_id))
                 doc_detail.content = doc_content
                 doc_dict.update({doc_id: doc_detail})
                 print('doc_dict add', doc_id)
