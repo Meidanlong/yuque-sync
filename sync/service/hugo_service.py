@@ -3,9 +3,11 @@ import os
 import toml
 from pypinyin import lazy_pinyin
 
+from sync.domain.constant.contants import OS_SEP
+
 
 def get_hugo_config():
-    config_path = os.path.join(os.path.dirname(__file__), '../../config.toml')
+    config_path = os.path.join(os.path.dirname(__file__), '../../config.toml'.replace('/', OS_SEP))
     with open(config_path, 'r') as file:
         config = toml.load(file)
         print(config['menu']['main'])
