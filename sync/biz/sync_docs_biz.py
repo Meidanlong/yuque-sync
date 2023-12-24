@@ -5,7 +5,7 @@ from sync.biz.local_blog_biz import get_content_posts_path, get_blog_content, ge
     update_local_doc, insert_local_doc
 from sync.domain.doc_detail import DocDetail
 from sync.service.cnblog_service import get_cnblog_recent_post, delete_cnblog_post, get_cnblog_key, new_cnblog_post, \
-    update_cnblog_post
+    update_cnblog_post, get_cnblog_from_map
 
 
 def sync_local(yuque_doc_dict: Dict[int, DocDetail]):
@@ -56,7 +56,7 @@ def sync_cnblog(yuque_doc_dict: Dict[int, DocDetail]):
     delete_doc_list = list(cnblog_map.values())
     # 3、对比博客园已有博客（反向对比）
     for yuque_doc_detail in yuque_doc_dict.values():
-        cnblog_doc = cnblog_map[get_cnblog_key(yuque_doc_detail)]
+        cnblog_doc = get_cnblog_from_map(cnblog_map, yuque_doc_detail)
         if cnblog_doc is None:
             # 3.1、如果博客园不存在该博客，则新增
             new_cnblog_post(yuque_doc_detail.title, yuque_doc_detail.content, yuque_doc_detail.tags)

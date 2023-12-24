@@ -40,7 +40,6 @@ def get_blog_detail(file_content: str) -> DocDetail:
         doc_detail.title = blog_overview['title']
         doc_detail.tags = blog_overview['tags']
         doc_detail.update_time = blog_overview['update_time']
-        doc_detail.cnblog_id = blog_overview['cnblog_id']
     except KeyError as e:
         print('KeyError:', e)
     return doc_detail
@@ -86,8 +85,10 @@ def update_local_doc(doc_detail: DocDetail):
 
 def upsert_local_doc(doc_detail: DocDetail):
     # 1、拼装文章
+    doc_content = doc_detail.content
+    doc_detail.content = None
     overview_yml = del_yml_useless_line(yaml.dump(data=doc_detail, allow_unicode=True))
-    all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content=doc_detail.content)
+    all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content=doc_content)
     # 2、生成本地博客文件
     content_path = get_content_posts_path()
     # 特殊处理：文件目录中有'/'替换为空格，否则会找不到路径

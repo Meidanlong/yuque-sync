@@ -72,3 +72,13 @@ def get_cnblog_key(doc_detail: DocDetail):
         # 博客园对keyword进行了排序
         cnblog_map_key = OS_SEP.join(sorted(doc_detail.tags))
     cnblog_map_key += '@' + doc_detail.title
+
+
+def get_cnblog_from_map(cnblog_map: {}, doc_detail: DocDetail):
+    if cnblog_map is None:
+        return None
+    try:
+        return cnblog_map[get_cnblog_key(doc_detail)]
+    except KeyError as e:
+        print('cnblog_map does not have the {title}, e={e}', title=doc_detail.title, e=e)
+        return None
