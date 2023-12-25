@@ -1,13 +1,11 @@
 import os
-from xmlrpc.client import Fault
 
 import yaml
 
+from sync.domain.constant.contants import OS_SEP
 from sync.domain.constant.private_data import REPO_NAME, REPO_BRANCH
 from sync.domain.doc_detail import DocDetail
-from sync.service.cnblog_service import new_cnblog_post, update_cnblog_post
 from sync.service.github_service import push_github_origin
-from sync.service.yuque_service import get_yuque_doc
 
 overview_tag = '---'
 
@@ -39,7 +37,7 @@ def get_blog_detail(file_content: str) -> DocDetail:
         doc_detail.doc_id = blog_overview['doc_id']
         doc_detail.title = blog_overview['title']
         doc_detail.tags = blog_overview['tags']
-        doc_detail.update_time = blog_overview['update_time']
+        doc_detail.update_time = blog_overview.get('update_time', None)
     except KeyError as e:
         print('KeyError:', e)
     return doc_detail
@@ -86,14 +84,14 @@ def update_local_doc(doc_detail: DocDetail):
 def upsert_local_doc(doc_detail: DocDetail):
     # 1、拼装文章
     doc_content = doc_detail.content
-    doc_detail.content = None
+    doc_detail.content = ''
     overview_yml = del_yml_useless_line(yaml.dump(data=doc_detail, allow_unicode=True))
     all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content=doc_content)
     # 2、生成本地博客文件
     content_path = get_content_posts_path()
     # 特殊处理：文件目录中有'/'替换为空格，否则会找不到路径
     file_name = special_file_name(doc_detail.title) + '.md'
-    relative_directory = '/'.join(doc_detail.tags)
+    relative_directory = OS_SEP.join(doc_detail.tags)
     relative_path = os.path.join(relative_directory, file_name)
     file_directory = os.path.join(content_path, relative_directory)
     file_path = os.path.join(file_directory, file_name)

@@ -8,4 +8,4 @@ class DocDetail:
     tags: [] = None
     update_time: datetime = None
     draft = False
-    content: str
+    content: str = None

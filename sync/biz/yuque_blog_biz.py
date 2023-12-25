@@ -55,12 +55,8 @@ def get_yuque_published_docs(exclude_books: List[str]) -> dict:
                 doc_detail.book_id = book_id
                 doc_detail.title = title
                 doc_detail.tags = tags
-                # 获取博客内容
-                doc_content = get_yuque_doc(book_id, doc_id)
-                print('get_yuque_doc: book_id={book_id}, doc_id={doc_id}'.format(book_id=book_id, doc_id=doc_id))
-                doc_detail.content = doc_content
                 doc_dict.update({doc_id: doc_detail})
-                print('doc_dict add', doc_id)
+                print('add doc: doc_id={doc_id}'.format(doc_id=doc_id))
 
         # 获取知识库目录详情
         docs = get_yuque_book(book_id)
@@ -75,14 +71,20 @@ def get_yuque_published_docs(exclude_books: List[str]) -> dict:
                 # public	公开性(0:私密, 1:公开, 2:企业内公开)
                 # status	状态(0:草稿, 1:发布)
                 doc_dict.pop(doc_id)
-                print('doc_dict pop', doc_id)
+                print('pop doc: doc_id={doc_id}'.format(doc_id=doc_id))
                 continue
 
             doc_detail = doc_dict[doc_id]
             # 记录文档详情
+            # 获取博客内容
+            doc_content = get_yuque_doc(book_id, doc_id)
+            print('get_yuque_doc: book_id={book_id}, doc_id={doc_id}'.format(book_id=book_id, doc_id=doc_id))
+            doc_detail.content = doc_content
+            # 获取更新时间
             update_time_str = str(doc['updated_at']).replace('-', '')
             update_time_str = update_time_str[:update_time_str.find('.')]
-            print('{} updated at : {}'.format(doc_id, update_time_str))
+            print('the update time of {title} is: {update_time_str}'.format(title=doc_detail.title, update_time_str=update_time_str))
             doc_detail.update_time = datetime.strptime(update_time_str, DATE_FORMAT)
-
+            doc_dict.update({doc_id: doc_detail})
+    print('get_yuque_published_docs: ', len(doc_dict))
     return doc_dict
