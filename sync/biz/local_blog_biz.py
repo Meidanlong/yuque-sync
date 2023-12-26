@@ -84,7 +84,9 @@ def update_local_doc(doc_detail: DocDetail):
 def upsert_local_doc(doc_detail: DocDetail):
     # 1、拼装文章
     doc_content = doc_detail.content
-    doc_detail.content = ''
+    if doc_content is not None:
+        # 删除对象的属性
+        delattr(doc_detail, 'content')
     overview_yml = del_yml_useless_line(yaml.dump(data=doc_detail, allow_unicode=True))
     all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content=doc_content)
     # 2、生成本地博客文件
