@@ -5,7 +5,7 @@ import yaml
 
 from sync.domain.constant.contants import DATE_FORMAT
 from sync.domain.doc_detail import DocDetail
-from sync.service.yuque_service import get_yuque_doc, get_yuque_book, get_yuque_repo
+from sync.service.yuque_service import get_yuque_doc, get_yuque_repo
 
 
 def get_yuque_published_docs(exclude_books: List[str]) -> dict:
@@ -58,33 +58,27 @@ def get_yuque_published_docs(exclude_books: List[str]) -> dict:
                 doc_dict.update({doc_id: doc_detail})
                 print('add doc: doc_id={doc_id}'.format(doc_id=doc_id))
 
-        # 获取知识库目录详情
-        docs = get_yuque_book(book_id)
-        for doc in docs:
-            # 如果文档不在doc_dict中记录（可能不是叶子节点），则跳过
-            doc_id = doc['id']
-            if not doc_dict.__contains__(doc_id):
-                continue
+        # 遍历结果字典
+        copy_doc_dict = doc_dict.copy()
+        for doc_detail in copy_doc_dict.values():
+            doc_info = get_yuque_doc(doc_detail.book_id, doc_detail.doc_id)
             # 如果文档未发布，则移除
-            if (doc['published_at'] is None or doc['updated_at'] is None
-                    or doc['public'] == 0 or doc['status'] == 0):
+            if (doc_info['published_at'] is None or doc_info['updated_at'] is None
+                    or doc_info['public'] == 0 or doc_info['status'] == 0):
                 # public	公开性(0:私密, 1:公开, 2:企业内公开)
                 # status	状态(0:草稿, 1:发布)
-                doc_dict.pop(doc_id)
-                print('pop doc: doc_id={doc_id}'.format(doc_id=doc_id))
-                continue
-
-            doc_detail = doc_dict[doc_id]
-            # 记录文档详情
-            # 获取博客内容
-            doc_content = get_yuque_doc(book_id, doc_id)
+                doc_dict.pop(doc_info['id'])
+            doc_content = doc_info['body']
             doc_detail.content = doc_content
-            print('{title} get_yuque_doc: book_id={book_id}, doc_id={doc_id}, doc_content size={doc_content_size}'.format(title=doc_detail.title, book_id=book_id, doc_id=doc_id, doc_content_size=len(doc_content)))
+            print(
+                '{title} get_yuque_doc: book_id={book_id}, doc_id={doc_id}, doc_content size={doc_content_size}'.format(
+                    title=doc_detail.title, book_id=doc_detail.book_id, doc_id=doc_detail.doc_id,
+                    doc_content_size=len(doc_content)))
             # 获取更新时间
-            update_time_str = str(doc['updated_at']).replace('-', '')
+            update_time_str = str(doc_info['updated_at']).replace('-', '')
             update_time_str = update_time_str[:update_time_str.find('.')]
+            print('the update time of {title} is: {update_time_str}'.format(title=doc_detail.title,
+                                                                            update_time_str=update_time_str))
             doc_detail.update_time = datetime.strptime(update_time_str, DATE_FORMAT)
-            print('the update time of {title} is: {update_time_str}'.format(title=doc_detail.title, update_time_str=update_time_str))
-            doc_dict.update({doc_id: doc_detail})
     print('get_yuque_published_docs: ', len(doc_dict))
     return doc_dict

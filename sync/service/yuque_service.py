@@ -22,7 +22,7 @@ def get_yuque_book(book_id: int):
 
 def get_yuque_doc(book_id: int, doc_id: str):
     url = GET_DOC_DETAIL_URL.format(book_id=book_id, id=doc_id, format='markdown')
-    return request_yuque(url, None)['body']
+    return request_yuque(url, None)
 
 
 def get_yuque_user():
