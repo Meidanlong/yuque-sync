@@ -1,3 +1,4 @@
+import time
 import xmlrpc.client
 from datetime import datetime
 
@@ -35,8 +36,14 @@ def new_cnblog_post(title, content, tags: []):
     else:
         struct['categories'] = ['[Markdown]']
 
-    post_id = get_cnblog_client().metaWeblog.newPost('', CNBLOG_USERNAME, CNBLOG_TOKEN, struct, True)
-    print(f'{title}发布成功 -> {post_id}'.format(title=title, post_id=post_id))
+    post_id = None
+    try:
+        post_id = get_cnblog_client().metaWeblog.newPost('', CNBLOG_USERNAME, CNBLOG_TOKEN, struct, True)
+        print(f'{title}发布成功 -> {post_id}'.format(title=title, post_id=post_id))
+    except Exception as e:
+        print("new_cnblog_post error: ", e)
+    # <Fault 500: '1 分钟内只能发布 20 篇博文，请稍候发布，联系邮箱：contact@cnblogs.com'>，故3秒钟能发1篇
+    time.sleep(3)
     return post_id
 
 
@@ -53,8 +60,13 @@ def update_cnblog_post(post_id, title, content, tags: []):
     else:
         struct['categories'] = ['[Markdown]']
 
-    post_id = get_cnblog_client().metaWeblog.editPost(post_id, CNBLOG_USERNAME, CNBLOG_TOKEN, struct, True)
-    print(f'{title}更新成功 -> {post_id}'.format(title=title, post_id=post_id))
+    try:
+        post_id = get_cnblog_client().metaWeblog.editPost(post_id, CNBLOG_USERNAME, CNBLOG_TOKEN, struct, True)
+        print(f'{title}更新成功 -> {post_id}'.format(title=title, post_id=post_id))
+    except Exception as e:
+        print("update_cnblog_post error: ", e)
+    time.sleep(3)
+    return post_id
 
 
 def delete_cnblog_post(cnblog_id: int):
@@ -71,14 +83,5 @@ def get_cnblog_key(doc_detail: DocDetail):
     if doc_detail.tags is not None:
         # 博客园对keyword进行了排序
         cnblog_map_key = OS_SEP.join(sorted(doc_detail.tags))
-    cnblog_map_key += '@' + doc_detail.title
-
-
-def get_cnblog_from_map(cnblog_map: {}, doc_detail: DocDetail):
-    if cnblog_map is None:
-        return None
-    try:
-        return cnblog_map[get_cnblog_key(doc_detail)]
-    except KeyError as e:
-        print('cnblog_map does not have the {title}, e={e}', title=doc_detail.title, e=e)
-        return None
+    cnblog_map_key = cnblog_map_key + '@' + doc_detail.title
+    return cnblog_map_key

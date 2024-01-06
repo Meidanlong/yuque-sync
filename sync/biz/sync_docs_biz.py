@@ -39,7 +39,6 @@ def sync_local(yuque_doc_dict: Dict[int, DocDetail]):
                 # 3.3、如果语雀文档没有内容则删除博客
                 remove_blog_and_file(local_file_path)
                 insert_doc_list.remove(yuque_doc_detail)
-                continue
             local_update_time = local_doc_detail.update_time
             yuque_update_time = yuque_doc_detail.update_time
             if local_update_time is None or yuque_update_time > local_update_time:
@@ -61,15 +60,15 @@ def sync_cnblog(yuque_doc_dict: Dict[int, DocDetail]):
     delete_doc_list = list(cnblog_map.values())
     # 3、对比博客园已有博客（反向对比）
     for yuque_doc_detail in yuque_doc_dict.values():
-        cnblog_doc = cnblog_map[get_cnblog_key(yuque_doc_detail)]
+        cnblog_doc = cnblog_map.get(get_cnblog_key(yuque_doc_detail), None)
+        if yuque_doc_detail.content is None:
+            # 3.1、如果语雀文档没有内容则删除博客
+            delete_doc_list.remove(cnblog_doc)
+            continue
         if cnblog_doc is None:
-            # 3.1、如果博客园不存在该博客，则新增
+            # 3.2、如果博客园不存在该博客，则新增
             new_cnblog_post(yuque_doc_detail.title, yuque_doc_detail.content, yuque_doc_detail.tags)
             print('sync_cnblog-insert: ', yuque_doc_detail.title)
-            continue
-        if yuque_doc_detail.content is None:
-            # 3.2、如果语雀文档没有内容则删除博客
-            delete_doc_list.remove(cnblog_doc)
             continue
         cnblog_update_time = cnblog_doc.get('dateCreated', None)
         yuque_update_time = yuque_doc_detail.update_time

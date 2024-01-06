@@ -1,10 +1,14 @@
-# 博客园个人信息
-CNBLOG_USERNAME = ''  # 博客用户名
-CNBLOG_METAWEBLOG_API = ''  # 博客metaweblog api地址
+# 博客园用户名
+CNBLOG_USERNAME = ''
+# 博客metaweblog api地址
+CNBLOG_METAWEBLOG_API = ''
 
-# Github个人信息
+# Github存储文档的仓库及分支
 REPO_NAME = ''
 REPO_BRANCH = ""
+# Github Pages发布对应仓库及分支
+PAGES_REPO_NAME = ''
+PAGES_REPO_BRANCH = ""
 
-# 排除知识库
+# 语雀知识库中，被排除的知识库列表。为空则获取全部知识库
 EXCLUDE_BOOKS = []

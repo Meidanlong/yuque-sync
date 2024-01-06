@@ -2,7 +2,7 @@ name: sync-to
 
 #on:
 #  schedule:
-#    - cron: "0 0 * * *"
+#    - cron: "0 10 * * *"
 
 jobs:
   build-linux:
@@ -24,5 +24,9 @@ jobs:
       run: |
         pip install -r requestments.txt
     - name: run shell
+      env:
+        CNBLOG_TOKEN: ${{ secrets.CNBLOG_TOKEN }}
+        GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+        YUQUE_ACCESS_TOKEN: ${{ secrets.YUQUE_ACCESS_TOKEN }}
       run: |
         sh sync/sync.sh
