@@ -74,15 +74,15 @@ def sync_cnblog(yuque_doc_dict: Dict[int, DocDetail]):
         yuque_update_time = yuque_doc_detail.update_time
         if cnblog_update_time is None or yuque_update_time > cnblog_update_time:
             # 3.3、更新该博客
-            update_cnblog_post(cnblog_doc['post_id'], yuque_doc_detail.title, yuque_doc_detail.content,
+            update_cnblog_post(cnblog_doc.get('post_id', None), yuque_doc_detail.title, yuque_doc_detail.content,
                                yuque_doc_detail.tags)
             # 维护
             delete_doc_list.remove(cnblog_doc)
             print('sync_cnblog-update: ', yuque_doc_detail.title)
     # 4、语雀中不存在的博客进行删除
     for cnblog_doc in delete_doc_list:
-        delete_cnblog_post(cnblog_doc['post_id'])
-        print('sync_cnblog-delete: ', cnblog_doc['title'])
+        delete_cnblog_post(cnblog_doc.get('post_id', None))
+        print('sync_cnblog-delete: ', cnblog_doc.get('title', None))
 
 
 def compare_and_update_docs(yuque_doc_dict: Dict[int, DocDetail]):

@@ -56,23 +56,28 @@ git clone --recurse-submodules <repository-url>
 #### 2.1、密钥获取
 我们要获取以下三个密钥：
 ##### a、CNBLOG_TOKEN：博客园密钥
+登录[博客园个人设置页面](https://i.cnblogs.com/settings)。下滑至最下方，关注红框内的信息。
 
+![博客园密钥获取.png](static/images/博客园密钥获取.png)
 ##### b、GIT_HUB_TOKEN：Github密钥
+登录[Github个人Settings页面](https://github.com/settings/tokens?type=beta) -- `Developer Settings` -- `Personal access tokens` -- `Fine-grained tokens` 新建密钥，理想的密钥是长期的且具备可操作仓库权限。
 
+![Github密钥获取.png](static/images/Github密钥获取.png)
 ##### c、YUQUE_ACCESS_TOKEN：语雀密钥
+登录[语雀后台](https://www.yuque.com/settings/tokens)，获取`Personal Access Token`
 
+![语雀密钥获取.png](static/images/语雀密钥获取.png)
 #### 2.2、密钥添加
 因为密钥在开源项目中是非常不安全的，我们可以利用Github的密钥管理功能代为存储。
 
 配置方式：`个人仓库` -- `Settings` -- `Security` -- `Screts and variables` -- `Action` -- `New repository secret`
 
 ![github添加密钥.png](static/images/github添加密钥.png)
-
 ### 3、更改配置
 需要根据自己的信息同步个人配置，更改`@/sync/domain/constant/private_data`文件
 
 ```python
-# 博客园用户名
+# 博客园登录名
 CNBLOG_USERNAME = ''
 # 博客metaweblog api地址
 CNBLOG_METAWEBLOG_API = ''

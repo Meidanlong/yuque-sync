@@ -23,6 +23,9 @@ def get_cnblog_recent_post() -> {}:
 
 
 def new_cnblog_post(title, content, tags: []):
+    if title is None or content is None:
+        print("new_cnblog_post error: params error")
+        return
     # 构建发布内容
     struct = {
         'title': title,
@@ -48,7 +51,10 @@ def new_cnblog_post(title, content, tags: []):
 
 
 def update_cnblog_post(post_id, title, content, tags: []):
-    # 构建发布内容
+    if post_id is None or title is None or content is None:
+        print("update_cnblog_post error: params error")
+        return
+        # 构建发布内容
     struct = {
         'title': title,
         'dateCreated': 0,
@@ -70,6 +76,8 @@ def update_cnblog_post(post_id, title, content, tags: []):
 
 
 def delete_cnblog_post(cnblog_id: int):
+    if cnblog_id is None:
+        return
     return get_cnblog_client().blogger.deletePost('', str(cnblog_id), CNBLOG_USERNAME, CNBLOG_TOKEN, True) > 0
 
 
@@ -79,7 +87,7 @@ def get_cnblog_client():
 
 
 def get_cnblog_key(doc_detail: DocDetail):
-    cnblog_map_key: str
+    cnblog_map_key = None
     if doc_detail.tags is not None:
         # 博客园对keyword进行了排序
         cnblog_map_key = OS_SEP.join(sorted(doc_detail.tags))

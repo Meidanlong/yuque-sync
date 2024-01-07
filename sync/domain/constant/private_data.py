@@ -1,4 +1,4 @@
-# 博客园用户名
+# 博客园登录名
 CNBLOG_USERNAME = ''
 # 博客metaweblog api地址
 CNBLOG_METAWEBLOG_API = ''
