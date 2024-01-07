@@ -1,7 +1,7 @@
 import os
 from typing import List, Dict
 
-from sync.biz.local_blog_biz import get_content_posts_path, get_blog_content, get_blog_detail, remove_blog_and_file, \
+from sync.biz.local_blog_biz import get_content_posts_path, get_file_content, get_blog_detail, remove_blog_and_file, \
     update_local_doc, insert_local_doc
 from sync.domain.doc_detail import DocDetail
 from sync.service.cnblog_service import get_cnblog_recent_post, delete_cnblog_post, get_cnblog_key, new_cnblog_post, \
@@ -21,7 +21,7 @@ def sync_local(yuque_doc_dict: Dict[int, DocDetail]):
             # 获取文件路径
             local_file_path = os.path.join(root, file)
             # 获取博客概览
-            local_doc_detail = get_blog_detail(get_blog_content(local_file_path))
+            local_doc_detail = get_blog_detail(get_file_content(local_file_path))
             if local_doc_detail is None:
                 # 3.1、本地博客不存在博客信息，则直接删除
                 remove_blog_and_file(local_file_path)

@@ -18,11 +18,15 @@ overview_format = '''\
 
 
 def get_content_posts_path():
+    return get_path('content/posts')
+
+
+def get_path(dir_name: str):
     return os.path.abspath(
-        os.path.join(os.path.join(os.path.dirname(__file__), os.path.pardir), os.path.pardir, 'content/posts'))
+        os.path.join(os.path.join(os.path.dirname(__file__), os.path.pardir), os.path.pardir, dir_name))
 
 
-def get_blog_content(file_path):
+def get_file_content(file_path):
     with open(file_path, 'r', encoding='utf-8') as md_file:
         return md_file.read()
 
@@ -110,3 +114,20 @@ def upsert_local_doc(doc_detail: DocDetail):
 
 def special_file_name(file_name):
     return file_name.replace('/', ' ').replace('*', '')
+
+
+def local_push_pages():
+    # 1、获取打包后的public文件夹路径
+    base_file = 'content/posts'
+    public_path = get_path(base_file)
+    # 2、遍历public文件
+    for root, dirs, files in os.walk(public_path):
+        for file in files:
+            if file == '.DS_Store':
+                continue
+            # 3、获取文件内容
+            local_file_path = os.path.join(root, file)
+            relative_path = local_file_path[local_file_path.rindex(base_file) + len(base_file):]
+            file_content = get_file_content(local_file_path)
+            commit_log = 'push pages'
+            push_github_origin(REPO_NAME, REPO_BRANCH, relative_path, file_content, commit_log)

@@ -13,7 +13,7 @@
 ## 二、目标
 1. 编辑语雀文档，公开的文档会自动定时同步个人博客和博客园
 2. 删除或更改的文档也会同步进行更新
-3. 提供开箱即用的基于hugo的FixIt主题的个人博客。如果已有博客，可直接提取项目中`sync`模块迁移至自有博客中，更改保存`博客目录(TARGET_DIR)`即可使用
+3. 提供开箱即用的基于[Hugo](https://discourse.gohugo.io/)的[FixIt](https://fixit.lruihao.cn/zh-cn/documentation/getting-started/)主题的个人博客。如果已有博客，可直接提取项目中`sync`模块迁移至自有博客中，更改保存`博客目录(TARGET_DIR)`即可使用
 
 ## 三、项目
 ### 1、简介
