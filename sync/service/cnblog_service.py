@@ -17,7 +17,9 @@ def get_cnblog_recent_post() -> {}:
     for cnblog in cnblog_details:
         xml_rpc_time = cnblog['dateCreated']
         cnblog['dateCreated'] = datetime.strptime(xml_rpc_time.value, DATE_FORMAT)  # string
-        tags = str(cnblog['mt_keywords']).replace(',', OS_SEP)
+        tags = str(cnblog.get('mt_keywords', None))
+        if tags is not None:
+            tags = tags.replace(',', OS_SEP)
         cnblog_map.update({tags + "@" + cnblog['title']: cnblog})
     return cnblog_map
 

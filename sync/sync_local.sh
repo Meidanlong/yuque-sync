@@ -1,9 +1,11 @@
 #!/bin/bash
 
-export PYTHONPATH=../
+cd ..
+export PYTHONPATH=./
 
-python -c "from app import yuque_sync; yuque_sync()"
+python -c "from sync.app import yuque_sync; yuque_sync()"
 
+#brew install hugo
 hugo deploy
 
-python -c "from app import push_pages; push_pages()"
+python -c "from sync.app import push_pages; push_pages()"
