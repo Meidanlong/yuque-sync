@@ -1,9 +1,8 @@
 openapi: 3.1.0
 info:
   title: 语雀 OpenAPI
-  summary: 语雀开放 API
   description: ''
-  version: 2.0.0
+  version: 2.0.1
 servers:
   - url: https://www.yuque.com
     description: 线上访问地址
@@ -43,9 +42,9 @@ components:
                   - 1
                   - 2
                 default: 1
-                description: |
-                  <p>角色<br />
-                  (0:管理员, 1:成员, 2:只读成员)</p>
+                description: |-
+                  角色
+                  (0:管理员, 1:成员, 2:只读成员)
     ApiV2DocCreatePost:
       content:
         application/json:
@@ -54,23 +53,24 @@ components:
             properties:
               slug:
                 type: string
-                description: |
-                  <p>路径</p>
+                description: 路径
               title:
                 type: string
                 default: 无标题
-                description: |
-                  <p>标题</p>
+                description: 标题
               public:
                 type: string
                 enum:
                   - 0
                   - 1
                   - 2
-                default: 0
-                description: |
-                  <p>公开性<br />
-                  (0:私密, 1:公开, 2:企业内公开)</p>
+                description: |+
+                  公开性
+                  (0:私密, 1:公开, 2:企业内公开)
+
+
+                  - 不填则继承知识库的公开性
+
               format:
                 type: string
                 enum:
@@ -78,13 +78,12 @@ components:
                   - html
                   - lake
                 default: markdown
-                description: |
-                  <p>内容格式<br />
-                  (markdown:Markdown 格式, html:HTML 标准格式, lake:语雀 Lake 格式)</p>
+                description: |-
+                  内容格式
+                  (markdown:Markdown 格式, html:HTML 标准格式, lake:语雀 Lake 格式)
               body:
                 type: string
-                description: |
-                  <p>正文内容</p>
+                description: 正文内容
             required:
               - body
     ApiV2DocUpdatePut:
@@ -95,13 +94,10 @@ components:
             properties:
               slug:
                 type: string
-                description: |
-                  <p>路径</p>
+                description: 路径
               title:
                 type: string
-                default: 无标题
-                description: |
-                  <p>标题</p>
+                description: 标题
               public:
                 type: string
                 enum:
@@ -109,9 +105,9 @@ components:
                   - 1
                   - 2
                 default: 0
-                description: |
-                  <p>公开性<br />
-                  (0:私密, 1:公开, 2:企业内公开)</p>
+                description: |-
+                  公开性
+                  (0:私密, 1:公开, 2:企业内公开)
               format:
                 type: string
                 enum:
@@ -119,13 +115,12 @@ components:
                   - html
                   - lake
                 default: markdown
-                description: |
-                  <p>内容格式<br />
-                  (markdown:Markdown 格式, html:HTML 标准格式, lake:语雀 Lake 格式)</p>
+                description: |-
+                  内容格式
+                  (markdown:Markdown 格式, html:HTML 标准格式, lake:语雀 Lake 格式)
               body:
                 type: string
-                description: |
-                  <p>正文内容</p>
+                description: 正文内容
     ApiV2RepoTocUpdatePut:
       content:
         application/json:
@@ -139,57 +134,54 @@ components:
                   - prependNode
                   - editNode
                   - removeNode
-                description: >
-                  <p>操作<br />
+                description: >+
+                  操作
 
                   (appendNode:尾插, prependNode:头插, editNode:编辑节点,
-                  removeNode:删除节点)</p>
+                  removeNode:删除节点)
 
-                  <ul>
 
-                  <li>action_mode 必填</li>
 
-                  <li>创建场景下不支持同级头插 prependNode</li>
+                  - action_mode 必填
 
-                  <li>删除节点不会删除关联文档</li>
+                  - 创建场景下不支持同级头插 prependNode
 
-                  <li>删除节点时: action_mode=sibling (删除当前节点), action_mode=child
-                  (删除当前节点及子节点)</li>
+                  - 删除节点不会删除关联文档
 
-                  </ul>
+                  - 删除节点时: action_mode=sibling (删除当前节点), action_mode=child
+                  (删除当前节点及子节点)
+
               action_mode:
                 type: string
                 enum:
                   - sibling
                   - child
-                description: |
-                  <p>操作模式<br />
-                  (sibling:同级, child:子级)</p>
+                description: |-
+                  操作模式
+                  (sibling:同级, child:子级)
               target_uuid:
                 type: string
-                description: |
-                  <p>目标节点 UUID, 不填默认为根节点</p>
-                  <ul>
-                  <li>获取方式: 调用"获取知识库目录"接口获取</li>
-                  </ul>
+                description: |-
+                  目标节点 UUID, 不填默认为根节点
+
+
+                  - 获取方式: 调用"获取知识库目录"接口获取
               node_uuid:
                 type: string
-                description: |
-                  <p>操作节点 UUID [移动/更新/删除必填]</p>
-                  <ul>
-                  <li>获取方式: 调用"获取知识库目录"接口获取</li>
-                  </ul>
+                description: |-
+                  操作节点 UUID [移动/更新/删除必填]
+
+
+                  - 获取方式: 调用"获取知识库目录"接口获取
               doc_id:
                 type: integer
-                description: |
-                  <p>文档 ID [创建文档必填]</p>
+                description: 文档 ID [创建文档必填]
                 deprecated: true
               doc_ids:
                 type: array
                 items:
                   type: integer
-                description: |
-                  <p>文档 ID 数组 [创建文档必填]</p>
+                description: 文档 ID 数组 [创建文档必填]
               type:
                 type: string
                 enum:
@@ -197,35 +189,33 @@ components:
                   - LINK
                   - TITLE
                 default: DOC
-                description: |
-                  <p>节点类型 [创建必填]<br />
-                  (DOC:文档, LINK:外链, TITLE:分组)</p>
+                description: |-
+                  节点类型 [创建必填]
+                  (DOC:文档, LINK:外链, TITLE:分组)
               title:
                 type: string
-                description: |
-                  <p>节点名称 [创建分组/外链必填]</p>
+                description: 节点名称 [创建分组/外链必填]
               url:
                 type: string
-                description: |
-                  <p>节点 URL [创建外链必填]</p>
+                description: 节点 URL [创建外链必填]
               open_window:
                 type: string
                 enum:
                   - 0
                   - 1
                 default: 0
-                description: |
-                  <p>是否新窗口打开 [外链选填]<br />
-                  (0:当前页打开, 1:新窗口打开)</p>
+                description: |-
+                  是否新窗口打开 [外链选填]
+                  (0:当前页打开, 1:新窗口打开)
               visible:
                 type: string
                 enum:
                   - 0
                   - 1
                 default: 1
-                description: |
-                  <p>是否可见<br />
-                  (0:不可见, 1:可见)</p>
+                description: |-
+                  是否可见
+                  (0:不可见, 1:可见)
             required:
               - action
     ApiV2RepoCreatePost:
@@ -236,16 +226,13 @@ components:
             properties:
               name:
                 type: string
-                description: |
-                  <p>名称</p>
+                description: 名称
               slug:
                 type: string
-                description: |
-                  <p>路径</p>
+                description: 路径
               description:
                 type: string
-                description: |
-                  <p>简介</p>
+                description: 简介
               public:
                 type: string
                 enum:
@@ -253,9 +240,14 @@ components:
                   - 1
                   - 2
                 default: 0
-                description: |
-                  <p>公开性<br />
-                  (0:私密, 1:公开, 2:企业内公开)</p>
+                description: |-
+                  公开性
+                  (0:私密, 1:公开, 2:企业内公开)
+              enhancedPrivacy:
+                type: boolean
+                description: |-
+                  增强私密性
+                  - 将除团队管理员之外的团队成员、团队只读成员也设置为无权限
             required:
               - name
               - slug
@@ -267,16 +259,13 @@ components:
             properties:
               name:
                 type: string
-                description: |
-                  <p>名称</p>
+                description: 名称
               slug:
                 type: string
-                description: |
-                  <p>路径</p>
+                description: 路径
               description:
                 type: string
-                description: |
-                  <p>简介</p>
+                description: 简介
               public:
                 type: string
                 enum:
@@ -284,25 +273,9 @@ components:
                   - 1
                   - 2
                 default: 0
-                description: |
-                  <p>公开性<br />
-                  (0:私密, 1:公开, 2:企业内公开)</p>
-              toc:
-                type: string
-                description: >
-                  <p>目录</p>
-
-                  <p>必须是 Markdown 格式, <code>[名称](文档路径)</code> 示例:</p>
-
-                  <pre data-syntax="markdown"><code class="lang-markdown hljs
-                  raw">- [新手指引]()
-                    - [语雀是什么](about)
-                    - [常见问题](faq)
-                  - [基础功能]()
-                    - [工作台](dashboard)
-                    - [如何设置自定义路径](nkt888)
-                  </code></pre>
-                deprecated: true
+                description: |-
+                  公开性
+                  (0:私密, 1:公开, 2:企业内公开)
   schemas:
     V2User:
       type: object
@@ -310,101 +283,120 @@ components:
         id:
           type: integer
           format: int64
-          description: |
-            <p>用户 ID</p>
+          description: |-
+
+            用户 ID
         type:
           type: string
-          description: |
-            <p>类型<br />
-            Always 'User'</p>
+          description: |-
+
+            类型
+            Always 'User'
           deprecated: true
         login:
           type: string
-          description: |
-            <p>登录名</p>
+          description: |-
+
+            登录名
         name:
           type: string
-          description: |
-            <p>昵称</p>
+          description: |-
+
+            昵称
         avatar_url:
           type: string
-          description: |
-            <p>头像</p>
+          description: |-
+
+            头像
         books_count:
           type: integer
-          description: |
-            <p>知识库数量</p>
+          description: |-
+
+            知识库数量
         public_books_count:
           type: integer
-          description: |
-            <p>公开的知识库数量</p>
+          description: |-
+
+            公开的知识库数量
         followers_count:
           type: integer
-          description: |
-            <p>被关注的人数</p>
+          description: |-
+
+            被关注的人数
         following_count:
           type: integer
-          description: |
-            <p>关注的人数</p>
+          description: |-
+
+            关注的人数
         public:
           type: integer
           enum:
             - 0
             - 1
             - 2
-          description: |
-            <p>公开性<br />
-            (0:私密, 1:公开, 2:企业内公开)</p>
+          description: |-
+
+            公开性
+            (0:私密, 1:公开, 2:企业内公开)
         description:
           type: string
-          description: |
-            <p>介绍</p>
+          description: |-
+
+            介绍
         created_at:
           type: string
           format: date-time
-          description: |
-            <p>创建时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            创建时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         updated_at:
           type: string
           format: date-time
-          description: |
-            <p>更新时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
     V2SearchResult:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: |
-            <p>ID</p>
+          description: |-
+
+            ID
         type:
           type: string
           enum:
             - doc
             - repo
-          description: |
-            <p>类型<br />
-            (doc:文档, repo:知识库)</p>
+          description: |-
+
+            类型
+            (doc:文档, repo:知识库)
         title:
           type: string
-          description: |
-            <p>标题<br />
-            <code>&lt;em&gt;&lt;/em&gt;</code> 高亮关键词</p>
+          description: |-
+
+            标题
+            `<em></em>` 高亮关键词
         summary:
           type: string
-          description: |
-            <p>摘要<br />
-            <code>&lt;em&gt;&lt;/em&gt;</code> 高亮关键词</p>
+          description: |-
+
+            摘要
+            `<em></em>` 高亮关键词
         url:
           type: string
-          description: |
-            <p>访问路径</p>
+          description: |-
+
+            访问路径
         info:
           type: string
-          description: |
-            <p>归属信息</p>
+          description: |-
+
+            归属信息
         target:
           oneOf:
             - $ref: '#/components/schemas/V2Doc'
@@ -415,122 +407,160 @@ components:
         id:
           type: integer
           format: int64
-          description: |
-            <p>文档 ID</p>
+          description: |-
+
+            文档 ID
+        type:
+          type: string
+          enum:
+            - Doc
+            - Sheet
+            - Thread
+            - Board
+            - Table
+          description: |-
+
+            文档类型
+            (Doc:普通文档, Sheet:表格, Thread:话题, Board:图集, Table:数据表)
         slug:
           type: string
-          description: |
-            <p>路径</p>
+          description: |-
+
+            路径
         title:
           type: string
-          description: |
-            <p>标题</p>
+          description: |-
+
+            标题
         description:
           type: string
-          description: |
-            <p>摘要</p>
+          description: |-
+
+            摘要
         cover:
           type: string
-          description: |
-            <p>封面</p>
+          description: |-
+
+            封面
         user_id:
           type: integer
           format: int64
-          description: |
-            <p>归属用户/团队 ID</p>
+          description: |-
+
+            归属用户/团队 ID
         book_id:
           type: integer
           format: int64
-          description: |
-            <p>归属知识库 ID</p>
+          description: |-
+
+            归属知识库 ID
         last_editor_id:
           type: integer
           format: int64
-          description: |
-            <p>最后编辑者 ID</p>
+          description: |-
+
+            最后编辑者 ID
         public:
           type: integer
           enum:
             - 0
             - 1
             - 2
-          description: |
-            <p>公开性<br />
-            (0:私密, 1:公开, 2:企业内公开)</p>
+          description: |-
+
+            公开性
+            (0:私密, 1:公开, 2:企业内公开)
         status:
           type: string
-          description: |
-            <p>状态<br />
-            (0:草稿, 1:发布)</p>
+          description: |-
+
+            状态
+            (0:草稿, 1:发布)
         likes_count:
           type: integer
-          description: |
-            <p>点赞数</p>
+          description: |-
+
+            点赞数
         read_count:
           type: integer
-          description: |
-            <p>阅读数</p>
-            <ul>
-            <li>需要传入 <code>optional_properties=hits</code> 获取</li>
-            </ul>
+          description: |+
+
+            阅读数
+
+
+            - 需要传入 `optional_properties=hits` 获取
+
         hits:
           type: integer
-          description: |
-            <p>阅读数</p>
-            <ul>
-            <li>需要传入 <code>optional_properties=hits</code> 获取</li>
-            </ul>
+          description: |+
+
+            阅读数
+
+
+            - 需要传入 `optional_properties=hits` 获取
+
           deprecated: true
         comments_count:
           type: integer
-          description: |
-            <p>评论数</p>
+          description: |-
+
+            评论数
         word_count:
           type: integer
-          description: |
-            <p>内容字数</p>
+          description: |-
+
+            内容字数
         created_at:
           type: string
           format: date-time
-          description: |
-            <p>创建时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            创建时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         updated_at:
           type: string
           format: date-time
-          description: |
-            <p>更新时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         content_updated_at:
           type: string
           format: date-time
-          description: |
-            <p>内容更新时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            内容更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         published_at:
           type: string
           format: date-time
-          description: |
-            <p>发布时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            发布时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         first_published_at:
           type: string
           format: date-time
-          description: |
-            <p>首次发布时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            首次发布时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         book:
           $ref: '#/components/schemas/V2Book'
+        user:
+          $ref: '#/components/schemas/V2User'
         last_editor:
           $ref: '#/components/schemas/V2User'
         latest_version_id:
           type: integer
           format: int64
-          description: |
-            <p>最新已发版本 ID</p>
-            <ul>
-            <li>需要传入 <code>optional_properties=latest_version_id</code> 获取</li>
-            </ul>
+          description: |+
+
+            最新已发版本 ID
+
+
+            - 需要传入 `optional_properties=latest_version_id` 获取
+
         tags:
           $ref: '#/components/schemas/V2Tag'
     V2Book:
@@ -539,225 +569,261 @@ components:
         id:
           type: integer
           format: int64
-          description: |
-            <p>知识库 ID</p>
+          description: |-
+
+            知识库 ID
         type:
           type: string
-          description: |
-            <p>类型<br />
-            (Book:文档, Design:图集, Sheet:表格, Resource:资源)</p>
+          description: |-
+
+            类型
+            (Book:文档, Design:图集, Sheet:表格, Resource:资源)
         slug:
           type: string
-          description: |
-            <p>路径</p>
+          description: |-
+
+            路径
         name:
           type: string
-          description: |
-            <p>名称</p>
+          description: |-
+
+            名称
         user_id:
           type: integer
           format: int64
-          description: |
-            <p>归属用户/团队 ID</p>
+          description: |-
+
+            归属用户/团队 ID
         description:
           type: string
-          description: |
-            <p>简介</p>
-        toc_yml:
-          type: string
-          description: |
-            <p>目录</p>
+          description: |-
+
+            简介
         creator_id:
           type: integer
           format: int64
-          description: |
-            <p>创建者 ID</p>
+          description: |-
+
+            创建者 ID
         public:
           type: integer
           enum:
             - 0
             - 1
             - 2
-          description: |
-            <p>公开性<br />
-            (0:私密, 1:公开, 2:企业内公开)</p>
+          description: |-
+
+            公开性
+            (0:私密, 1:公开, 2:企业内公开)
         items_count:
           type: integer
-          description: |
-            <p>文档数量</p>
+          description: |-
+
+            文档数量
         likes_count:
           type: integer
-          description: |
-            <p>点赞数量</p>
+          description: |-
+
+            点赞数量
         watches_count:
           type: integer
-          description: |
-            <p>订阅数量</p>
+          description: |-
+
+            订阅数量
         content_updated_at:
           type: string
           format: date-time
-          description: |
-            <p>知识库 META 更新时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            知识库 META 更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         created_at:
           type: string
           format: date-time
-          description: |
-            <p>创建时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            创建时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         updated_at:
           type: string
           format: date-time
-          description: |
-            <p>更新时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         user:
           $ref: '#/components/schemas/V2User'
         namespace:
           type: string
-          description: |
-            <p>完整路径</p>
+          description: |-
+
+            完整路径
     V2Tag:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: |
-            <p>TAG ID</p>
+          description: |-
+
+            TAG ID
         title:
           type: string
-          description: |
-            <p>TAG NAME</p>
+          description: |-
+
+            TAG NAME
         doc_id:
           type: integer
           format: int64
-          description: |
-            <p>文档 ID</p>
+          description: |-
+
+            文档 ID
         book_id:
           type: integer
           format: int64
-          description: |
-            <p>知识库 ID</p>
+          description: |-
+
+            知识库 ID
         user_id:
           type: integer
           format: int64
-          description: |
-            <p>创建者 ID</p>
+          description: |-
+
+            创建者 ID
         created_at:
           type: string
           format: date-time
-          description: |
-            <p>创建时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            创建时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         updated_at:
           type: string
           format: date-time
-          description: |
-            <p>更新时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
     V2Group:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: |
-            <p>团队 ID</p>
+          description: |-
+
+            团队 ID
         type:
           type: string
-          description: |
-            <p>类型<br />
-            Always 'Group'</p>
+          description: |-
+
+            类型
+            Always 'Group'
           deprecated: true
         login:
           type: string
-          description: |
-            <p>路径</p>
+          description: |-
+
+            路径
         name:
           type: string
-          description: |
-            <p>名称</p>
+          description: |-
+
+            名称
         avatar_url:
           type: string
-          description: |
-            <p>头像</p>
+          description: |-
+
+            头像
         books_count:
           type: integer
-          description: |
-            <p>知识库数量</p>
+          description: |-
+
+            知识库数量
         public_books_count:
           type: integer
-          description: |
-            <p>公开的知识库数量</p>
+          description: |-
+
+            公开的知识库数量
         members_count:
           type: integer
-          description: |
-            <p>成员人数</p>
+          description: |-
+
+            成员人数
         public:
           type: integer
           enum:
             - 0
             - 1
             - 2
-          description: |
-            <p>公开性<br />
-            (0:私密, 1:公开, 2:企业内公开)</p>
+          description: |-
+
+            公开性
+            (0:私密, 1:公开, 2:企业内公开)
         description:
           type: string
-          description: |
-            <p>介绍</p>
+          description: |-
+
+            介绍
         created_at:
           type: string
           format: date-time
-          description: |
-            <p>创建时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            创建时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         updated_at:
           type: string
           format: date-time
-          description: |
-            <p>更新时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
     V2GroupUser:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: |
-            <p>ID</p>
+          description: |-
+
+            ID
         group_id:
           type: integer
           format: int64
-          description: |
-            <p>团队 ID</p>
+          description: |-
+
+            团队 ID
         user_id:
           type: integer
           format: int64
-          description: |
-            <p>成员 ID</p>
+          description: |-
+
+            成员 ID
         role:
           type: integer
           enum:
             - 0
             - 1
             - 2
-          description: |
-            <p>成员角色<br />
-            (0:管理员, 1:成员, 2:只读成员)</p>
+          description: |-
+
+            成员角色
+            (0:管理员, 1:成员, 2:只读成员)
         created_at:
           type: string
           format: date-time
-          description: |
-            <p>创建时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            创建时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         updated_at:
           type: string
           format: date-time
-          description: |
-            <p>更新时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         group:
           $ref: '#/components/schemas/V2Group'
         user:
@@ -768,132 +834,208 @@ components:
         id:
           type: integer
           format: int64
-          description: |
-            <p>文档 ID</p>
+          description: |-
+
+            文档 ID
+        type:
+          type: string
+          enum:
+            - Doc
+            - Sheet
+            - Thread
+            - Board
+            - Table
+          description: |-
+
+            文档类型
+            (Doc:普通文档, Sheet:表格, Thread:话题, Board:图集, Table:数据表)
         slug:
           type: string
-          description: |
-            <p>路径</p>
+          description: |-
+
+            路径
         title:
           type: string
-          description: |
-            <p>标题</p>
+          description: |-
+
+            标题
         description:
           type: string
-          description: |
-            <p>摘要</p>
+          description: |-
+
+            摘要
         cover:
           type: string
-          description: |
-            <p>封面</p>
+          description: |-
+
+            封面
         user_id:
           type: integer
           format: int64
-          description: |
-            <p>归属用户/团队 ID</p>
+          description: |-
+
+            归属用户/团队 ID
         book_id:
           type: integer
           format: int64
-          description: |
-            <p>归属知识库 ID</p>
+          description: |-
+
+            归属知识库 ID
         last_editor_id:
           type: integer
           format: int64
-          description: |
-            <p>最后编辑者 ID</p>
+          description: |-
+
+            最后编辑者 ID
         format:
           type: string
           enum:
             - markdown
             - lake
             - html
-            - text
-          description: >
-            <p>内容格式<br />
+            - lakesheet
+          description: >-
+
+            内容格式
 
             (markdown:Markdown 格式, lake:语雀 Lake 格式, html:HTML 标准格式,
-            text:纯文本格式)</p>
+            lakesheet:语雀表格)
         body_draft:
           type: string
-          description: |
-            <p>草稿内容</p>
+          description: |-
+
+            正文草稿内容
         body:
           type: string
-          description: |
-            <p>原始内容</p>
+          description: |-
+
+            正文原始内容
+        body_sheet:
+          type: string
+          description: |+
+
+            表格正文内容
+
+
+            语雀表格 (lakesheet) 正文格式示例, JSON 反序列化后的结构:
+            (注意: 所有项的值均为字符串, 公式项为计算后的值, 日期格式: yyyy-mm-dd HH:MM:SS)
+
+
+            ```json
+            {
+              "version": "1.0",
+              "data": [
+                {
+                  "name": "Sheet1",
+                  "index": 0,
+                  "rowCount": 100,
+                  "colCount": 4,
+                  "table": [
+                    ["参数名", "类型", "必填", "默认值"],
+                    ["name", "string", "1", ""],
+                    ["flag", "boolean", "0", "false"]
+                  ]
+                },
+                {
+                  "name": "Sheet2",
+                  "index": 0,
+                  "rowCount": 100,
+                  "colCount": 8,
+                  "table": []
+                }
+              ]
+            }
+            ```
+
         body_html:
           type: string
-          description: |
-            <p>HTML 标准内容</p>
+          description: |-
+
+            正文 HTML 标准格式内容
         body_lake:
           type: string
-          description: |
-            <p>语雀 Lake 内容</p>
+          description: |-
+
+            正文语雀 Lake 格式内容
         public:
           type: integer
           enum:
             - 0
             - 1
             - 2
-          description: |
-            <p>公开性<br />
-            (0:私密, 1:公开, 2:企业内公开)</p>
+          description: |-
+
+            公开性
+            (0:私密, 1:公开, 2:企业内公开)
         status:
           type: string
-          description: |
-            <p>状态<br />
-            (0:草稿, 1:发布)</p>
+          description: |-
+
+            状态
+            (0:草稿, 1:发布)
         likes_count:
           type: integer
-          description: |
-            <p>点赞数</p>
+          description: |-
+
+            点赞数
         read_count:
           type: integer
-          description: |
-            <p>阅读数</p>
+          description: |+
+
+            阅读数
+
         hits:
           type: integer
-          description: |
-            <p>阅读数</p>
+          description: |+
+
+            阅读数
+
           deprecated: true
         comments_count:
           type: integer
-          description: |
-            <p>评论数</p>
+          description: |-
+
+            评论数
         word_count:
           type: integer
-          description: |
-            <p>内容字数</p>
+          description: |-
+
+            内容字数
         created_at:
           type: string
           format: date-time
-          description: |
-            <p>创建时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            创建时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         updated_at:
           type: string
           format: date-time
-          description: |
-            <p>更新时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         content_updated_at:
           type: string
           format: date-time
-          description: |
-            <p>内容更新时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            内容更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         published_at:
           type: string
           format: date-time
-          description: |
-            <p>发布时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            发布时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         first_published_at:
           type: string
           format: date-time
-          description: |
-            <p>首次发布时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            首次发布时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         book:
           $ref: '#/components/schemas/V2Book'
         user:
@@ -905,46 +1047,55 @@ components:
         latest_version_id:
           type: integer
           format: int64
-          description: |
-            <p>最新已发版本 ID</p>
+          description: |+
+
+            最新已发版本 ID
+
     V2DocVersion:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: |
-            <p>版本 ID</p>
+          description: |-
+
+            版本 ID
         doc_id:
           type: integer
           format: int64
-          description: |
-            <p>文档 ID</p>
+          description: |-
+
+            文档 ID
         slug:
           type: string
-          description: |
-            <p>文档路径</p>
+          description: |-
+
+            文档路径
         title:
           type: string
-          description: |
-            <p>文档标题</p>
+          description: |-
+
+            文档标题
         user_id:
           type: integer
           format: int64
-          description: |
-            <p>发版人 ID</p>
+          description: |-
+
+            发版人 ID
         created_at:
           type: string
           format: date-time
-          description: |
-            <p>创建时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            创建时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         updated_at:
           type: string
           format: date-time
-          description: |
-            <p>更新时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         user:
           $ref: '#/components/schemas/V2User'
     V2DocVersionDetail:
@@ -953,63 +1104,78 @@ components:
         id:
           type: integer
           format: int64
-          description: |
-            <p>版本 ID</p>
+          description: |-
+
+            版本 ID
         doc_id:
           type: integer
           format: int64
-          description: |
-            <p>文档 ID</p>
+          description: |-
+
+            文档 ID
         slug:
           type: string
-          description: |
-            <p>文档路径</p>
+          description: |-
+
+            文档路径
         title:
           type: string
-          description: |
-            <p>文档标题</p>
+          description: |-
+
+            文档标题
         user_id:
           type: integer
           format: int64
-          description: |
-            <p>发版人 ID</p>
+          description: |-
+
+            发版人 ID
         format:
           type: string
           enum:
             - markdown
             - lake
             - html
-          description: |
-            <p>内容格式<br />
-            (markdown:Markdown 格式, lake:语雀 Lake 格式, html:HTML 标准格式)</p>
+            - lakesheet
+          description: >-
+
+            内容格式
+
+            (markdown:Markdown 格式, lake:语雀 Lake 格式, html:HTML 标准格式,
+            lakesheet:语雀表格)
         body:
           type: string
-          description: |
-            <p>原始内容</p>
+          description: |-
+
+            正文原始内容
         body_html:
           type: string
-          description: |
-            <p>HTML 标准内容</p>
+          description: |-
+
+            正文 HTML 标准格式内容
         body_asl:
           type: string
-          description: |
-            <p>ASL 格式内容</p>
+          description: |-
+
+            正文语雀 Lake 格式内容
         diff:
           type: string
-          description: |
-            <p>版本 DIFF</p>
+          description: |-
+
+            版本 DIFF
         created_at:
           type: string
           format: date-time
-          description: |
-            <p>创建时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            创建时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         updated_at:
           type: string
           format: date-time
-          description: |
-            <p>更新时间<br />
-            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)</p>
+          description: |-
+
+            更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
         user:
           $ref: '#/components/schemas/V2User'
     V2TocItem:
@@ -1017,82 +1183,197 @@ components:
       properties:
         uuid:
           type: string
-          description: |
-            <p>节点唯一 ID</p>
+          description: |-
+
+            节点唯一 ID
         type:
           type: string
           enum:
             - DOC
             - LINK
             - TITLE
-          description: |
-            <p>节点类型<br />
-            (DOC:文档, LINK:外链, TITLE:分组)</p>
+          description: |-
+
+            节点类型
+            (DOC:文档, LINK:外链, TITLE:分组)
         title:
           type: string
-          description: |
-            <p>节点名称</p>
+          description: |-
+
+            节点名称
         url:
           type: string
-          description: |
-            <p>节点 URL</p>
+          description: |-
+
+            节点 URL
         slug:
           type: string
-          description: |
-            <p>节点 URL</p>
+          description: |-
+
+            节点 URL
           deprecated: true
         id:
           type: integer
           format: int64
-          description: |
-            <p>文档 ID</p>
+          description: |-
+
+            文档 ID
           deprecated: true
         doc_id:
           type: integer
           format: int64
-          description: |
-            <p>文档 ID</p>
+          description: |-
+
+            文档 ID
         level:
           type: integer
-          description: |
-            <p>节点层级</p>
+          description: |-
+
+            节点层级
         depth:
           type: integer
-          description: |
-            <p>节点层级</p>
+          description: |-
+
+            节点层级
           deprecated: true
         open_window:
           type: integer
           enum:
             - 0
             - 1
-          description: |
-            <p>是否在新窗口打开<br />
-            (0:当前页打开, 1:新窗口打开)</p>
+          description: |-
+
+            是否在新窗口打开
+            (0:当前页打开, 1:新窗口打开)
         visible:
           type: integer
           enum:
             - 0
             - 1
-          description: |
-            <p>是否可见<br />
-            (0:不可见, 1:可见)</p>
+          description: |-
+
+            是否可见
+            (0:不可见, 1:可见)
         prev_uuid:
           type: string
-          description: |
-            <p>同级前一个节点 uuid</p>
+          description: |-
+
+            同级前一个节点 uuid
         sibling_uuid:
           type: string
-          description: |
-            <p>同级后一个节点 uuid</p>
+          description: |-
+
+            同级后一个节点 uuid
         child_uuid:
           type: string
-          description: |
-            <p>子级第一个节点 uuid</p>
+          description: |-
+
+            子级第一个节点 uuid
         parent_uuid:
           type: string
-          description: |
-            <p>父级节点 uuid</p>
+          description: |-
+
+            父级节点 uuid
+    V2BookDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: |-
+
+            知识库 ID
+        type:
+          type: string
+          description: |-
+
+            类型
+            (Book:文档, Design:图集, Sheet:表格, Resource:资源)
+        slug:
+          type: string
+          description: |-
+
+            路径
+        name:
+          type: string
+          description: |-
+
+            名称
+        user_id:
+          type: integer
+          format: int64
+          description: |-
+
+            归属用户/团队 ID
+        description:
+          type: string
+          description: |-
+
+            简介
+        toc_yml:
+          type: string
+          description: |-
+
+            目录
+        creator_id:
+          type: integer
+          format: int64
+          description: |-
+
+            创建者 ID
+        public:
+          type: integer
+          enum:
+            - 0
+            - 1
+            - 2
+          description: |-
+
+            公开性
+            (0:私密, 1:公开, 2:企业内公开)
+        items_count:
+          type: integer
+          description: |-
+
+            文档数量
+        likes_count:
+          type: integer
+          description: |-
+
+            点赞数量
+        watches_count:
+          type: integer
+          description: |-
+
+            订阅数量
+        content_updated_at:
+          type: string
+          format: date-time
+          description: |-
+
+            知识库 META 更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
+        created_at:
+          type: string
+          format: date-time
+          description: |-
+
+            创建时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
+        updated_at:
+          type: string
+          format: date-time
+          description: |-
+
+            更新时间
+            格式: YYYY-MM-DDTHH:mm:ss.sssZ (ISO_8601)
+        user:
+          $ref: '#/components/schemas/V2User'
+        namespace:
+          type: string
+          description: |-
+
+            完整路径
     V2GroupStatistics:
       type: object
       properties:
@@ -1101,172 +1382,130 @@ components:
           description: ''
         user_id:
           type: string
-          description: |
-            <p>统计日期 (YYYYMMDD)</p>
+          description: 统计日期 (YYYYMMDD)
         organization_id:
           type: string
-          description: |
-            <p>团队 ID</p>
+          description: 团队 ID
         member_count:
           type: string
-          description: |
-            <p>归属空间 ID</p>
+          description: 归属空间 ID
         collaborator_count:
           type: string
-          description: |
-            <p>成员数</p>
+          description: 成员数
         day_read_count:
           type: string
-          description: |
-            <p>协作者数</p>
+          description: 协作者数
         day_write_count:
           type: string
-          description: |
-            <p>当日阅读量</p>
+          description: 当日阅读量
         write_count:
           type: string
-          description: |
-            <p>当日编辑次数</p>
+          description: 当日编辑次数
         read_count:
           type: string
-          description: |
-            <p>编辑次数</p>
+          description: 编辑次数
         read_count_30:
           type: string
-          description: |
-            <p>阅读量</p>
+          description: 阅读量
         read_count_365:
           type: string
-          description: |
-            <p>阅读量 (30天)</p>
+          description: 阅读量 (30天)
         comment_count:
           type: string
-          description: |
-            <p>阅读量 (一年)</p>
+          description: 阅读量 (一年)
         comment_count_30:
           type: string
-          description: |
-            <p>评论量</p>
+          description: 评论量
         comment_count_365:
           type: string
-          description: |
-            <p>评论量 (30天)</p>
+          description: 评论量 (30天)
         like_count:
           type: string
-          description: |
-            <p>评论量 (一年)</p>
+          description: 评论量 (一年)
         like_count_30:
           type: string
-          description: |
-            <p>点赞量</p>
+          description: 点赞量
         like_count_365:
           type: string
-          description: |
-            <p>点赞量 (30天)</p>
+          description: 点赞量 (30天)
         follow_count:
           type: string
-          description: |
-            <p>点赞量 (一年)</p>
+          description: 点赞量 (一年)
         collect_count:
           type: string
-          description: |
-            <p>关注量</p>
+          description: 关注量
         doc_count:
           type: string
-          description: |
-            <p>收藏量</p>
+          description: 收藏量
         sheet_count:
           type: string
-          description: |
-            <p>文档数量</p>
+          description: 文档数量
         board_count:
           type: string
-          description: |
-            <p>表格数量</p>
+          description: 表格数量
         show_count:
           type: string
-          description: |
-            <p>画板数量</p>
+          description: 画板数量
         resource_count:
           type: string
-          description: |
-            <p>演示文稿数量</p>
+          description: 演示文稿数量
         artboard_count:
           type: string
-          description: |
-            <p>资源数量</p>
+          description: 资源数量
         attachment_count:
           type: string
-          description: |
-            <p>图集数量</p>
+          description: 图集数量
         book_count:
           type: string
-          description: |
-            <p>附件数量</p>
+          description: 附件数量
         public_book_count:
           type: string
-          description: |
-            <p>知识库总数量</p>
+          description: 知识库总数量
         private_book_count:
           type: string
-          description: |
-            <p>公开知识库数量</p>
+          description: 公开知识库数量
         book_book_count:
           type: string
-          description: |
-            <p>私密知识库数量</p>
+          description: 私密知识库数量
         book_resource_count:
           type: string
-          description: |
-            <p>文档知识库数量</p>
+          description: 文档知识库数量
         book_design_count:
           type: string
-          description: |
-            <p>资源知识库数量</p>
+          description: 资源知识库数量
         book_thread_count:
           type: string
-          description: |
-            <p>图片知识库数量</p>
+          description: 图片知识库数量
         data_usage:
           type: string
-          description: |
-            <p>话题知识库数量</p>
+          description: 话题知识库数量
         grains_count:
           type: string
-          description: |
-            <p>流量使用量</p>
+          description: 流量使用量
         grains_count_sum:
           type: string
-          description: |
-            <p>当前稻谷数</p>
+          description: 当前稻谷数
         grains_count_consume:
           type: string
-          description: |
-            <p>累计获得稻谷数</p>
+          description: 累计获得稻谷数
         interaction_people_count:
           type: string
-          description: |
-            <p>已消耗稻谷数</p>
+          description: 已消耗稻谷数
         content_count:
           type: string
-          description: |
-            <p>知识交流人数</p>
+          description: 知识交流人数
         collaboration_count:
           type: string
-          description: |
-            <p>知识财富数</p>
+          description: 知识财富数
         working_hours:
           type: string
-          description: |
-            <p>知识协同次数</p>
+          description: 知识协同次数
         baike:
           type: string
-          description: |
-            <p>协同提效时长 (小时)</p>
+          description: 协同提效时长 (小时)
         table_count:
           type: string
-          description: |
-            <p>百科全书卷数</p>
+          description: 百科全书卷数
     V2MemberStatistics:
       type: object
       properties:
@@ -1275,68 +1514,52 @@ components:
           description: ''
         user_id:
           type: string
-          description: |
-            <p>统计日期 (YYYYMMDD)</p>
+          description: 统计日期 (YYYYMMDD)
         group_id:
           type: string
-          description: |
-            <p>成员 ID</p>
+          description: 成员 ID
         organization_id:
           type: string
-          description: |
-            <p>团队 ID</p>
+          description: 团队 ID
         write_count:
           type: string
-          description: |
-            <p>空间 ID</p>
+          description: 空间 ID
         write_count_30:
           type: string
-          description: |
-            <p>编辑次数</p>
+          description: 编辑次数
         write_count_365:
           type: string
-          description: |
-            <p>编辑次数 (30天)</p>
+          description: 编辑次数 (30天)
         write_doc_count:
           type: string
-          description: |
-            <p>编辑次数 (一年)</p>
+          description: 编辑次数 (一年)
         write_doc_count_30:
           type: string
-          description: |
-            <p>编辑文档数</p>
+          description: 编辑文档数
         write_doc_count_365:
           type: string
-          description: |
-            <p>编辑文档数 (30天)</p>
+          description: 编辑文档数 (30天)
         read_count:
           type: string
-          description: |
-            <p>编辑文档数 (一年)</p>
+          description: 编辑文档数 (一年)
         read_count_30:
           type: string
-          description: |
-            <p>阅读量</p>
+          description: 阅读量
         read_count_365:
           type: string
-          description: |
-            <p>阅读量 (30天)</p>
+          description: 阅读量 (30天)
         like_count:
           type: string
-          description: |
-            <p>阅读量 (一年)</p>
+          description: 阅读量 (一年)
         like_count_30:
           type: string
-          description: |
-            <p>点赞量</p>
+          description: 点赞量
         like_count_365:
           type: string
-          description: |
-            <p>点赞量 (30天)</p>
+          description: 点赞量 (30天)
         user:
           type: string
-          description: |
-            <p>点赞量 (一年)</p>
+          description: 点赞量 (一年)
     V2BookStatistics:
       type: object
       properties:
@@ -1345,180 +1568,136 @@ components:
           description: ''
         book_id:
           type: string
-          description: |
-            <p>统计日期 (YYYYMMDD)</p>
+          description: 统计日期 (YYYYMMDD)
         slug:
           type: string
-          description: |
-            <p>知识库 ID</p>
+          description: 知识库 ID
         name:
           type: string
-          description: |
-            <p>知识库 slug</p>
+          description: 知识库 slug
         type:
           type: string
-          description: |
-            <p>知识库名称</p>
+          description: 知识库名称
         is_public:
           type: string
-          description: |
-            <p>知识库类型</p>
+          description: 知识库类型
         content_updated_at_ms:
           type: string
-          description: |
-            <p>是否公开</p>
+          description: 是否公开
         user_id:
           type: string
-          description: |
-            <p>最近更新时间</p>
+          description: 最近更新时间
         organization_id:
           type: string
-          description: |
-            <p>知识库归属 ID</p>
+          description: 知识库归属 ID
         day_read_count:
           type: string
-          description: |
-            <p>知识库归属空间 ID</p>
+          description: 知识库归属空间 ID
         day_write_count:
           type: string
-          description: |
-            <p>当日阅读量</p>
+          description: 当日阅读量
         day_like_count:
           type: string
-          description: |
-            <p>当日编辑次数</p>
+          description: 当日编辑次数
         post_count:
           type: string
-          description: |
-            <p>当日点赞量</p>
+          description: 当日点赞量
         word_count:
           type: string
-          description: |
-            <p>文档数</p>
+          description: 文档数
         write_count:
           type: string
-          description: |
-            <p>字数</p>
+          description: 字数
         write_count_30:
           type: string
-          description: |
-            <p>编辑次数</p>
+          description: 编辑次数
         read_count:
           type: string
-          description: |
-            <p>编辑次数 (30天)</p>
+          description: 编辑次数 (30天)
         read_count_30:
           type: string
-          description: |
-            <p>阅读量</p>
+          description: 阅读量
         read_count_365:
           type: string
-          description: |
-            <p>阅读量 (30天)</p>
+          description: 阅读量 (30天)
         like_count:
           type: string
-          description: |
-            <p>阅读量 (一年)</p>
+          description: 阅读量 (一年)
         like_count_7:
           type: string
-          description: |
-            <p>点赞量</p>
+          description: 点赞量
         like_count_30:
           type: string
-          description: |
-            <p>点赞量 (7天)</p>
+          description: 点赞量 (7天)
         like_count_365:
           type: string
-          description: |
-            <p>点赞量 (30天)</p>
+          description: 点赞量 (30天)
         watch_count:
           type: string
-          description: |
-            <p>点赞量 (一年)</p>
+          description: 点赞量 (一年)
         watch_count_7:
           type: string
-          description: |
-            <p>关注量</p>
+          description: 关注量
         watch_count_30:
           type: string
-          description: |
-            <p>关注量 (7天)</p>
+          description: 关注量 (7天)
         watch_count_365:
           type: string
-          description: |
-            <p>关注量 (30天)</p>
+          description: 关注量 (30天)
         comment_count:
           type: string
-          description: |
-            <p>关注量 (一年)</p>
+          description: 关注量 (一年)
         comment_count_30:
           type: string
-          description: |
-            <p>评论量</p>
+          description: 评论量
         comment_count_365:
           type: string
-          description: |
-            <p>评论量 (30天)</p>
+          description: 评论量 (30天)
         like_rank_rate:
           type: string
-          description: |
-            <p>评论量 (一年)</p>
+          description: 评论量 (一年)
         popularity_30:
           type: string
-          description: |
-            <p>知识库点赞数排名</p>
+          description: 知识库点赞数排名
         doc_count:
           type: string
-          description: |
-            <p>30 天热度</p>
+          description: 30 天热度
         sheet_count:
           type: string
-          description: |
-            <p>文档数量</p>
+          description: 文档数量
         board_count:
           type: string
-          description: |
-            <p>表格数量</p>
+          description: 表格数量
         show_count:
           type: string
-          description: |
-            <p>画板数量</p>
+          description: 画板数量
         resource_count:
           type: string
-          description: |
-            <p>演示文稿数量</p>
+          description: 演示文稿数量
         artboard_count:
           type: string
-          description: |
-            <p>资源数量</p>
+          description: 资源数量
         attachment_count:
           type: string
-          description: |
-            <p>图集数量</p>
+          description: 图集数量
         interaction_people_count:
           type: string
-          description: |
-            <p>附件数量</p>
+          description: 附件数量
         content_count:
           type: string
-          description: |
-            <p>知识交流人数</p>
+          description: 知识交流人数
         collaboration_count:
           type: string
-          description: |
-            <p>知识财富数</p>
+          description: 知识财富数
         working_hours:
           type: string
-          description: |
-            <p>知识协同次数</p>
+          description: 知识协同次数
         baike:
           type: string
-          description: |
-            <p>协同提效时长 (小时)</p>
+          description: 协同提效时长 (小时)
         table_count:
           type: string
-          description: |
-            <p>百科全书卷数</p>
+          description: 百科全书卷数
     V2DocStatistics:
       type: object
       properties:
@@ -1527,120 +1706,91 @@ components:
           description: ''
         book_id:
           type: string
-          description: |
-            <p>统计日期 (YYYYMMDD)</p>
+          description: 统计日期 (YYYYMMDD)
         doc_id:
           type: string
-          description: |
-            <p>知识库 ID</p>
+          description: 知识库 ID
         slug:
           type: string
-          description: |
-            <p>文档 ID</p>
+          description: 文档 ID
         title:
           type: string
-          description: |
-            <p>文档 slug</p>
+          description: 文档 slug
         type:
           type: string
-          description: |
-            <p>文档标题</p>
+          description: 文档标题
         is_public:
           type: string
-          description: |
-            <p>知识库类型</p>
+          description: 知识库类型
         created_at:
           type: string
-          description: |
-            <p>是否公开</p>
+          description: 是否公开
         content_updated_at:
           type: string
-          description: |
-            <p>创建时间</p>
+          description: 创建时间
         user_id:
           type: string
-          description: |
-            <p>最近更新时间</p>
+          description: 最近更新时间
         organization_id:
           type: string
-          description: |
-            <p>文档归属 ID</p>
+          description: 文档归属 ID
         day_read_count:
           type: string
-          description: |
-            <p>文档归属空间 ID</p>
+          description: 文档归属空间 ID
         day_write_count:
           type: string
-          description: |
-            <p>当日阅读量</p>
+          description: 当日阅读量
         day_like_count:
           type: string
-          description: |
-            <p>当日编辑次数</p>
+          description: 当日编辑次数
         word_count:
           type: string
-          description: |
-            <p>当日点赞量</p>
+          description: 当日点赞量
         write_count:
           type: string
-          description: |
-            <p>字数</p>
+          description: 字数
         read_count:
           type: string
-          description: |
-            <p>编辑次数</p>
+          description: 编辑次数
         read_count_7:
           type: string
-          description: |
-            <p>阅读量</p>
+          description: 阅读量
         read_count_30:
           type: string
-          description: |
-            <p>阅读量 (7天)</p>
+          description: 阅读量 (7天)
         read_count_365:
           type: string
-          description: |
-            <p>阅读量 (30天)</p>
+          description: 阅读量 (30天)
         like_count:
           type: string
-          description: |
-            <p>阅读量 (一年)</p>
+          description: 阅读量 (一年)
         like_count_7:
           type: string
-          description: |
-            <p>点赞量</p>
+          description: 点赞量
         like_count_30:
           type: string
-          description: |
-            <p>点赞量 (7天)</p>
+          description: 点赞量 (7天)
         like_count_365:
           type: string
-          description: |
-            <p>点赞量 (30天)</p>
+          description: 点赞量 (30天)
         comment_count:
           type: string
-          description: |
-            <p>点赞量 (一年)</p>
+          description: 点赞量 (一年)
         comment_count_30:
           type: string
-          description: |
-            <p>评论量</p>
+          description: 评论量
         comment_count_365:
           type: string
-          description: |
-            <p>评论量 (30天)</p>
+          description: 评论量 (30天)
         popularity_30:
           type: string
-          description: |
-            <p>评论量 (一年)</p>
+          description: 评论量 (一年)
         attachment_count:
           type: string
-          description: |
-            <p>30 天热度</p>
+          description: 30 天热度
         user:
           type: string
-          description: |
-            <p>附件数量</p>
+          description: 附件数量
 security:
   - authToken: []
 paths:
@@ -1649,9 +1799,10 @@ paths:
       tags:
         - user
       summary: 心跳
-      description: |
-        <p>心跳<br />
-        GET /api/v2/hello</p>
+      operationId: USER/心跳
+      description: |-
+        心跳
+        GET /api/v2/hello
       responses:
         '200':
           description: OK
@@ -1665,8 +1816,7 @@ paths:
                     properties:
                       message:
                         type: string
-                        description: |
-                          <p>欢迎消息</p>
+                        description: 欢迎消息
         '400': &ref_0
           $ref: '#/components/responses/400'
         '401': &ref_1
@@ -1686,9 +1836,11 @@ paths:
       tags:
         - user
       summary: 获取当前 Token 的用户详情
-      description: |
-        <p>获取当前 Token 的用户详情<br />
-        GET /api/v2/user</p>
+      operationId: USER/获取当前_Token_的用户详情
+      description: |+
+        获取当前 Token 的用户详情
+        GET /api/v2/user
+
       responses:
         '200':
           description: OK
@@ -1711,17 +1863,18 @@ paths:
       tags:
         - search
       summary: 通用搜索
-      description: |
-        <p>通用搜索<br />
-        GET /api/v2/search</p>
-        <ul>
-        <li>支持分页, PageSize 固定为 20</li>
-        </ul>
+      operationId: SEARCH/通用搜索
+      description: |+
+        通用搜索
+        GET /api/v2/search
+
+
+        - 支持分页, PageSize 固定为 20
+
       parameters:
         - name: q
           in: query
-          description: |
-            <p>搜索关键词</p>
+          description: 搜索关键词
           required: true
           deprecated: false
           schema:
@@ -1729,9 +1882,9 @@ paths:
             maxLength: 200
         - name: type
           in: query
-          description: |
-            <p>搜索类型<br />
-            (doc:文档, repo:知识库)</p>
+          description: |-
+            搜索类型
+            (doc:文档, repo:知识库)
           required: true
           deprecated: false
           schema:
@@ -1741,17 +1894,20 @@ paths:
               - repo
         - name: scope
           in: query
-          description: |
-            <p>搜索范围, 不填默认为搜索当前用户/团队</p>
-            <p>[例子]</p>
-            <pre><code>- 假设:
+          description: |-
+            搜索范围, 不填默认为搜索当前用户/团队
+
+
+            [例子]
+            ```
+            - 假设:
               - 团队 URL = https://yuque_domain/group_a
               - 知识库 URL = https://yuque_domain/group_a/book_x
             - 则:
               - 搜索团队里的文档: { type: 'doc', scope: 'group_a' }
               - 搜索团队里的知识库: { type: 'repo', scope: 'group_a' }
               - 搜索知识库里的文档: { type: 'doc', scope: 'group_a/book_x' }
-            </code></pre>
+            ```
           required: false
           deprecated: false
           schema:
@@ -1759,8 +1915,7 @@ paths:
             maxLength: 400
         - name: page
           in: query
-          description: |
-            <p>页码 [分页参数]</p>
+          description: 页码 [分页参数]
           required: false
           deprecated: false
           schema:
@@ -1769,8 +1924,7 @@ paths:
             maximum: 100
         - name: offset
           in: query
-          description: |
-            <p>页码, 非偏移量 [分页参数]</p>
+          description: 页码, 非偏移量 [分页参数]
           required: false
           deprecated: true
           schema:
@@ -1779,24 +1933,21 @@ paths:
             maximum: 100
         - name: strict
           in: query
-          description: |
-            <p>关键词精确匹配, 不分词</p>
+          description: 关键词精确匹配, 不分词
           required: false
           deprecated: false
           schema:
             type: boolean
         - name: related
           in: query
-          description: |
-            <p>仅搜索与我相关 [筛选条件]</p>
+          description: 仅搜索与我相关 [筛选条件]
           required: false
           deprecated: false
           schema:
             type: boolean
         - name: creatorId
           in: query
-          description: |
-            <p>仅搜索指定作者 ID [筛选条件]</p>
+          description: 仅搜索指定作者 ID [筛选条件]
           required: false
           deprecated: false
           schema:
@@ -1814,16 +1965,13 @@ paths:
                     properties:
                       total:
                         type: integer
-                        description: |
-                          <p>结果总量</p>
+                        description: 结果总量
                       pageNo:
                         type: integer
-                        description: |
-                          <p>页码</p>
+                        description: 页码
                       pageSize:
                         type: integer
-                        description: |
-                          <p>每页数量</p>
+                        description: 每页数量
                   data:
                     type: array
                     items:
@@ -1840,26 +1988,27 @@ paths:
       tags:
         - group
       summary: 获取用户的团队
-      description: |
-        <p>获取用户的团队<br />
-        GET /api/v2/users/:id/groups</p>
-        <ul>
-        <li>支持分页, PageSize 固定为 100</li>
-        </ul>
+      operationId: GROUP/获取用户的团队
+      description: |+
+        获取用户的团队
+        GET /api/v2/users/:id/groups
+
+
+        - 支持分页, PageSize 固定为 100
+
       parameters:
         - name: id
           in: path
-          description: |
-            <p>用户 login 或 ID</p>
+          description: 用户 login 或 ID
           required: true
           deprecated: false
           schema:
             type: string
         - name: role
           in: query
-          description: |
-            <p>角色 [过滤条件]<br />
-            (0:管理员, 1:成员)</p>
+          description: |-
+            角色 [过滤条件]
+            (0:管理员, 1:成员)
           required: false
           deprecated: false
           schema:
@@ -1869,8 +2018,7 @@ paths:
               - 1
         - name: offset
           in: query
-          description: |
-            <p>偏移量 [分页条件]</p>
+          description: 偏移量 [分页条件]
           required: false
           deprecated: false
           schema:
@@ -1898,26 +2046,27 @@ paths:
       tags:
         - group
       summary: 获取团队的成员
-      description: |
-        <p>获取团队的成员<br />
-        GET /api/v2/groups/:login/users</p>
-        <ul>
-        <li>支持分页, PageSize 固定为 100</li>
-        </ul>
+      operationId: GROUP/获取团队的成员
+      description: |+
+        获取团队的成员
+        GET /api/v2/groups/:login/users
+
+
+        - 支持分页, PageSize 固定为 100
+
       parameters:
         - name: login
           in: path
-          description: |
-            <p>团队 Login or ID</p>
+          description: 团队 Login or ID
           required: true
           deprecated: false
           schema:
             type: string
         - name: role
           in: query
-          description: |
-            <p>角色 [筛选条件]<br />
-            (0:管理员, 1:成员, 2:只读成员)</p>
+          description: |-
+            角色 [筛选条件]
+            (0:管理员, 1:成员, 2:只读成员)
           required: false
           deprecated: false
           schema:
@@ -1928,8 +2077,7 @@ paths:
               - 2
         - name: offset
           in: query
-          description: |
-            <p>偏移量 [分页条件]</p>
+          description: 偏移量 [分页条件]
           required: false
           deprecated: false
           schema:
@@ -1958,26 +2106,23 @@ paths:
     put:
       tags:
         - group
-      summary: 邀请/变更成员
-      description: |
-        <p>邀请/变更成员<br />
-        PUT /api/v2/groups/:login/users/:id</p>
-        <ul>
-        <li>如 {id} 传入未加入团队的用户 Login/ID, 则会向该用户发起成员邀请</li>
-        </ul>
+      summary: 变更成员
+      operationId: GROUP/变更成员
+      description: |+
+        变更成员
+        PUT /api/v2/groups/:login/users/:id
+
       parameters:
         - name: login
           in: path
-          description: |
-            <p>团队 Login or ID</p>
+          description: 团队 Login or ID
           required: true
           deprecated: false
           schema:
             type: string
         - name: id
           in: path
-          description: |
-            <p>用户 Login or ID</p>
+          description: 用户 Login or ID
           required: true
           deprecated: false
           schema:
@@ -2005,22 +2150,21 @@ paths:
       tags:
         - group
       summary: 删除成员
-      description: |
-        <p>删除成员<br />
-        DELETE /api/v2/groups/:login/users/:id</p>
+      operationId: GROUP/删除成员
+      description: |-
+        删除成员
+        DELETE /api/v2/groups/:login/users/:id
       parameters:
         - name: login
           in: path
-          description: |
-            <p>团队 Login or ID</p>
+          description: 团队 Login or ID
           required: true
           deprecated: false
           schema:
             type: string
         - name: id
           in: path
-          description: |
-            <p>用户 Login or ID</p>
+          description: 用户 Login or ID
           required: true
           deprecated: false
           schema:
@@ -2038,8 +2182,7 @@ paths:
                     properties:
                       user_id:
                         type: string
-                        description: |
-                          <p>删除用户 ID</p>
+                        description: 删除用户 ID
         '400': *ref_0
         '401': *ref_1
         '403': *ref_2
@@ -2052,23 +2195,23 @@ paths:
       tags:
         - doc
       summary: 获取知识库文档列表
-      description: |
-        <p>获取知识库文档列表<br />
-        GET /api/v2/repos/:book_id/docs<br />
-        GET /api/v2/repos/:group_login/:book_slug/docs</p>
+      operationId: DOC/获取知识库文档列表
+      description: |+
+        获取知识库文档列表
+        GET /api/v2/repos/:book_id/docs
+        GET /api/v2/repos/:group_login/:book_slug/docs
+
       parameters:
         - name: book_id
           in: path
-          description: |
-            <p>知识库 ID</p>
+          description: 知识库 ID
           required: true
           deprecated: false
           schema:
             type: integer
         - name: offset
           in: query
-          description: |
-            <p>偏移量 [分页参数]</p>
+          description: 偏移量 [分页参数]
           required: false
           deprecated: false
           schema:
@@ -2076,34 +2219,27 @@ paths:
             default: 0
         - name: limit
           in: query
-          description: |
-            <p>每页数量 [分页参数]</p>
-            <ul>
-            <li>未来会随时调整本字段的 max_size, 请勿依赖</li>
-            </ul>
+          description: 每页数量 [分页参数]
           required: false
           deprecated: false
           schema:
             type: integer
-            maximum: 500
+            maximum: 100
             default: 100
         - name: optional_properties
           in: query
-          description: |
-            <p>获取的额外字段, 多个字段以逗号分隔</p>
-            <ul>
-            <li>
-            <p>注意: 每页数量超过 100 本字段会失效</p>
-            </li>
-            <li>
-            <p>支持的字段有:</p>
-            <ul>
-            <li>hits: 文档阅读数</li>
-            <li>tags: 标签</li>
-            <li>latest_version_id: 最新已发版本 ID</li>
-            </ul>
-            </li>
-            </ul>
+          description: |+
+            获取的额外字段, 多个字段以逗号分隔
+
+
+            - 注意: 每页数量超过 100 本字段会失效
+
+
+            - 支持的字段有:
+              - hits: 文档阅读数
+              - tags: 标签
+              - latest_version_id: 最新已发版本 ID
+
           required: false
           deprecated: false
           schema:
@@ -2117,6 +2253,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  meta:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        description: 结果总量
                   data:
                     type: array
                     items:
@@ -2132,18 +2274,19 @@ paths:
       tags:
         - doc
       summary: 创建文档
-      description: |
-        <p>创建文档<br />
-        POST /api/v2/repos/:book_id/docs<br />
-        POST /api/v2/repos/:group_login/:book_slug/docs</p>
-        <ul>
-        <li>注意: 创建文档后不会自动添加到目录，需要调用"知识库目录更新接口"更新到目录中</li>
-        </ul>
+      operationId: DOC/创建文档
+      description: |+
+        创建文档
+        POST /api/v2/repos/:book_id/docs
+        POST /api/v2/repos/:group_login/:book_slug/docs
+
+
+        - 注意: 创建文档后不会自动添加到目录，需要调用"知识库目录更新接口"更新到目录中
+
       parameters:
         - name: book_id
           in: path
-          description: |
-            <p>知识库 ID</p>
+          description: 知识库 ID
           required: true
           deprecated: false
           schema:
@@ -2172,23 +2315,23 @@ paths:
       tags:
         - doc
       summary: 获取文档详情
-      description: |
-        <p>获取文档详情<br />
-        GET /api/v2/repos/:book_id/docs/:id<br />
-        GET /api/v2/repos/:group_login/:book_slug/docs/:id</p>
+      operationId: DOC/获取文档详情
+      description: |+
+        获取文档详情
+        GET /api/v2/repos/:book_id/docs/:id
+        GET /api/v2/repos/:group_login/:book_slug/docs/:id
+
       parameters:
         - name: book_id
           in: path
-          description: |
-            <p>知识库 ID</p>
+          description: 知识库 ID
           required: true
           deprecated: false
           schema:
             type: integer
         - name: id
           in: path
-          description: |
-            <p>文档 ID or 路径</p>
+          description: 文档 ID or 路径
           required: true
           deprecated: false
           schema:
@@ -2214,23 +2357,23 @@ paths:
       tags:
         - doc
       summary: 更新文档
-      description: |
-        <p>更新文档<br />
-        PUT /api/v2/repos/:book_id/docs/:id<br />
-        PUT /api/v2/repos/:group_login/:book_slug/docs/:id</p>
+      operationId: DOC/更新文档
+      description: |+
+        更新文档
+        PUT /api/v2/repos/:book_id/docs/:id
+        PUT /api/v2/repos/:group_login/:book_slug/docs/:id
+
       parameters:
         - name: book_id
           in: path
-          description: |
-            <p>知识库 ID</p>
+          description: 知识库 ID
           required: true
           deprecated: false
           schema:
             type: integer
         - name: id
           in: path
-          description: |
-            <p>文档 ID or 路径</p>
+          description: 文档 ID or 路径
           required: true
           deprecated: false
           schema:
@@ -2258,23 +2401,23 @@ paths:
       tags:
         - doc
       summary: 删除文档
-      description: |
-        <p>删除文档<br />
-        DELETE /api/v2/repos/:book_id/docs/:id<br />
-        DELETE /api/v2/repos/:group_login/:book_slug/docs/:id</p>
+      operationId: DOC/删除文档
+      description: |+
+        删除文档
+        DELETE /api/v2/repos/:book_id/docs/:id
+        DELETE /api/v2/repos/:group_login/:book_slug/docs/:id
+
       parameters:
         - name: book_id
           in: path
-          description: |
-            <p>知识库 ID</p>
+          description: 知识库 ID
           required: true
           deprecated: false
           schema:
             type: integer
         - name: id
           in: path
-          description: |
-            <p>文档 ID or 路径</p>
+          description: 文档 ID or 路径
           required: true
           deprecated: false
           schema:
@@ -2301,31 +2444,30 @@ paths:
       tags:
         - doc
       summary: 获取知识库文档列表
-      description: |
-        <p>获取知识库文档列表<br />
-        GET /api/v2/repos/:book_id/docs<br />
-        GET /api/v2/repos/:group_login/:book_slug/docs</p>
+      operationId: DOC/获取知识库文档列表
+      description: |+
+        获取知识库文档列表
+        GET /api/v2/repos/:book_id/docs
+        GET /api/v2/repos/:group_login/:book_slug/docs
+
       parameters:
         - name: group_login
           in: path
-          description: |
-            <p>团队 Login</p>
+          description: 团队 Login
           required: true
           deprecated: false
           schema:
             type: string
         - name: book_slug
           in: path
-          description: |
-            <p>知识库路径</p>
+          description: 知识库路径
           required: true
           deprecated: false
           schema:
             type: string
         - name: offset
           in: query
-          description: |
-            <p>偏移量 [分页参数]</p>
+          description: 偏移量 [分页参数]
           required: false
           deprecated: false
           schema:
@@ -2333,34 +2475,27 @@ paths:
             default: 0
         - name: limit
           in: query
-          description: |
-            <p>每页数量 [分页参数]</p>
-            <ul>
-            <li>未来会随时调整本字段的 max_size, 请勿依赖</li>
-            </ul>
+          description: 每页数量 [分页参数]
           required: false
           deprecated: false
           schema:
             type: integer
-            maximum: 500
+            maximum: 100
             default: 100
         - name: optional_properties
           in: query
-          description: |
-            <p>获取的额外字段, 多个字段以逗号分隔</p>
-            <ul>
-            <li>
-            <p>注意: 每页数量超过 100 本字段会失效</p>
-            </li>
-            <li>
-            <p>支持的字段有:</p>
-            <ul>
-            <li>hits: 文档阅读数</li>
-            <li>tags: 标签</li>
-            <li>latest_version_id: 最新已发版本 ID</li>
-            </ul>
-            </li>
-            </ul>
+          description: |+
+            获取的额外字段, 多个字段以逗号分隔
+
+
+            - 注意: 每页数量超过 100 本字段会失效
+
+
+            - 支持的字段有:
+              - hits: 文档阅读数
+              - tags: 标签
+              - latest_version_id: 最新已发版本 ID
+
           required: false
           deprecated: false
           schema:
@@ -2374,6 +2509,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  meta:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        description: 结果总量
                   data:
                     type: array
                     items:
@@ -2389,26 +2530,26 @@ paths:
       tags:
         - doc
       summary: 创建文档
-      description: |
-        <p>创建文档<br />
-        POST /api/v2/repos/:book_id/docs<br />
-        POST /api/v2/repos/:group_login/:book_slug/docs</p>
-        <ul>
-        <li>注意: 创建文档后不会自动添加到目录，需要调用"知识库目录更新接口"更新到目录中</li>
-        </ul>
+      operationId: DOC/创建文档
+      description: |+
+        创建文档
+        POST /api/v2/repos/:book_id/docs
+        POST /api/v2/repos/:group_login/:book_slug/docs
+
+
+        - 注意: 创建文档后不会自动添加到目录，需要调用"知识库目录更新接口"更新到目录中
+
       parameters:
         - name: group_login
           in: path
-          description: |
-            <p>团队 Login</p>
+          description: 团队 Login
           required: true
           deprecated: false
           schema:
             type: string
         - name: book_slug
           in: path
-          description: |
-            <p>知识库路径</p>
+          description: 知识库路径
           required: true
           deprecated: false
           schema:
@@ -2437,31 +2578,30 @@ paths:
       tags:
         - doc
       summary: 获取文档详情
-      description: |
-        <p>获取文档详情<br />
-        GET /api/v2/repos/:book_id/docs/:id<br />
-        GET /api/v2/repos/:group_login/:book_slug/docs/:id</p>
+      operationId: DOC/获取文档详情
+      description: |+
+        获取文档详情
+        GET /api/v2/repos/:book_id/docs/:id
+        GET /api/v2/repos/:group_login/:book_slug/docs/:id
+
       parameters:
         - name: group_login
           in: path
-          description: |
-            <p>团队 Login</p>
+          description: 团队 Login
           required: true
           deprecated: false
           schema:
             type: string
         - name: book_slug
           in: path
-          description: |
-            <p>知识库路径</p>
+          description: 知识库路径
           required: true
           deprecated: false
           schema:
             type: string
         - name: id
           in: path
-          description: |
-            <p>文档 ID or 路径</p>
+          description: 文档 ID or 路径
           required: true
           deprecated: false
           schema:
@@ -2487,31 +2627,30 @@ paths:
       tags:
         - doc
       summary: 更新文档
-      description: |
-        <p>更新文档<br />
-        PUT /api/v2/repos/:book_id/docs/:id<br />
-        PUT /api/v2/repos/:group_login/:book_slug/docs/:id</p>
+      operationId: DOC/更新文档
+      description: |+
+        更新文档
+        PUT /api/v2/repos/:book_id/docs/:id
+        PUT /api/v2/repos/:group_login/:book_slug/docs/:id
+
       parameters:
         - name: group_login
           in: path
-          description: |
-            <p>团队 Login</p>
+          description: 团队 Login
           required: true
           deprecated: false
           schema:
             type: string
         - name: book_slug
           in: path
-          description: |
-            <p>知识库路径</p>
+          description: 知识库路径
           required: true
           deprecated: false
           schema:
             type: string
         - name: id
           in: path
-          description: |
-            <p>文档 ID or 路径</p>
+          description: 文档 ID or 路径
           required: true
           deprecated: false
           schema:
@@ -2539,31 +2678,30 @@ paths:
       tags:
         - doc
       summary: 删除文档
-      description: |
-        <p>删除文档<br />
-        DELETE /api/v2/repos/:book_id/docs/:id<br />
-        DELETE /api/v2/repos/:group_login/:book_slug/docs/:id</p>
+      operationId: DOC/删除文档
+      description: |+
+        删除文档
+        DELETE /api/v2/repos/:book_id/docs/:id
+        DELETE /api/v2/repos/:group_login/:book_slug/docs/:id
+
       parameters:
         - name: group_login
           in: path
-          description: |
-            <p>团队 Login</p>
+          description: 团队 Login
           required: true
           deprecated: false
           schema:
             type: string
         - name: book_slug
           in: path
-          description: |
-            <p>知识库路径</p>
+          description: 知识库路径
           required: true
           deprecated: false
           schema:
             type: string
         - name: id
           in: path
-          description: |
-            <p>文档 ID or 路径</p>
+          description: 文档 ID or 路径
           required: true
           deprecated: false
           schema:
@@ -2590,17 +2728,18 @@ paths:
       tags:
         - doc
       summary: 获取文档历史版本列表
-      description: |
-        <p>获取文档历史版本列表<br />
-        GET /api/v2/doc_versions</p>
-        <ul>
-        <li>按时间倒序返回最近 100 个已发布版本</li>
-        </ul>
+      operationId: DOC/获取文档历史版本列表
+      description: |+
+        获取文档历史版本列表
+        GET /api/v2/doc_versions
+
+
+        - 按时间倒序返回最近 100 个已发布版本
+
       parameters:
         - name: doc_id
           in: query
-          description: |
-            <p>文档 ID</p>
+          description: 文档 ID
           required: true
           deprecated: false
           schema:
@@ -2629,14 +2768,15 @@ paths:
       tags:
         - doc
       summary: 获取文档历史版本详情
-      description: |
-        <p>获取文档历史版本详情<br />
-        GET /api/v2/doc_versions/:id</p>
+      operationId: DOC/获取文档历史版本详情
+      description: |+
+        获取文档历史版本详情
+        GET /api/v2/doc_versions/:id
+
       parameters:
         - name: id
           in: path
-          description: |
-            <p>版本 ID</p>
+          description: 版本 ID
           required: true
           deprecated: false
           schema:
@@ -2663,15 +2803,16 @@ paths:
       tags:
         - doc
       summary: 获取目录
-      description: |
-        <p>获取目录<br />
-        GET /api/v2/repos/:book_id/toc<br />
-        GET /api/v2/repos/:group_login/:book_slug/toc</p>
+      operationId: DOC/获取目录
+      description: |+
+        获取目录
+        GET /api/v2/repos/:book_id/toc
+        GET /api/v2/repos/:group_login/:book_slug/toc
+
       parameters:
         - name: book_id
           in: path
-          description: |
-            <p>知识库 ID</p>
+          description: 知识库 ID
           required: true
           deprecated: false
           schema:
@@ -2699,98 +2840,56 @@ paths:
       tags:
         - doc
       summary: 更新目录
-      description: |
-        <p>更新目录<br />
-        PUT /api/v2/repos/:book_id/toc<br />
-        PUT /api/v2/repos/:group_login/:book_slug/toc</p>
-        <p>字段说明:</p>
-        <ul>
-        <li>所有场景
-        <ul>
-        <li>必填字段
-        <ul>
-        <li>action</li>
-        <li>action_mode</li>
-        </ul>
-        </li>
-        <li>选填字段
-        <ul>
-        <li>target_uuid</li>
-        <li>visible</li>
-        </ul>
-        </li>
-        </ul>
-        </li>
-        <li>创建场景
-        <ul>
-        <li>必填字段
-        <ul>
-        <li>创建文档节点
-        <ul>
-        <li>type</li>
-        <li>doc_ids</li>
-        </ul>
-        </li>
-        <li>创建分组节点
-        <ul>
-        <li>type</li>
-        <li>title</li>
-        </ul>
-        </li>
-        <li>创建外链节点
-        <ul>
-        <li>type</li>
-        <li>title</li>
-        <li>url</li>
-        <li>open_window</li>
-        </ul>
-        </li>
-        </ul>
-        </li>
-        </ul>
-        </li>
-        <li>移动场景
-        <ul>
-        <li>必填字段
-        <ul>
-        <li>target_uuid</li>
-        <li>node_uuid</li>
-        </ul>
-        </li>
-        </ul>
-        </li>
-        <li>编辑场景
-        <ul>
-        <li>必填字段
-        <ul>
-        <li>node_uuid</li>
-        </ul>
-        </li>
-        <li>选填字段
-        <ul>
-        <li>type</li>
-        <li>title</li>
-        <li>url</li>
-        <li>open_window</li>
-        </ul>
-        </li>
-        </ul>
-        </li>
-        <li>删除场景
-        <ul>
-        <li>必填字段
-        <ul>
-        <li>node_uuid</li>
-        </ul>
-        </li>
-        </ul>
-        </li>
-        </ul>
+      operationId: DOC/更新目录
+      description: |+
+        更新目录
+        PUT /api/v2/repos/:book_id/toc
+        PUT /api/v2/repos/:group_login/:book_slug/toc
+
+
+        字段说明:
+
+
+        - 所有场景
+          - 必填字段
+            - action
+            - action_mode
+          - 选填字段
+            - target_uuid
+            - visible
+        - 创建场景
+          - 必填字段
+            - 创建文档节点
+              - type
+              - doc_ids
+            - 创建分组节点
+              - type
+              - title
+            - 创建外链节点
+              - type
+              - title
+              - url
+              - open_window
+        - 移动场景
+          - 必填字段
+            - target_uuid
+            - node_uuid
+        - 编辑场景
+          - 必填字段
+            - node_uuid
+          - 选填字段
+            - type
+            - title
+            - url
+            - open_window
+        - 删除场景
+          - 必填字段
+            - node_uuid
+
       parameters:
         - name: book_id
           in: path
-          description: |
-            <p>知识库 ID</p>
+          description: 知识库 ID
           required: true
           deprecated: false
           schema:
@@ -2821,23 +2920,23 @@ paths:
       tags:
         - doc
       summary: 获取目录
-      description: |
-        <p>获取目录<br />
-        GET /api/v2/repos/:book_id/toc<br />
-        GET /api/v2/repos/:group_login/:book_slug/toc</p>
+      operationId: DOC/获取目录
+      description: |+
+        获取目录
+        GET /api/v2/repos/:book_id/toc
+        GET /api/v2/repos/:group_login/:book_slug/toc
+
       parameters:
         - name: group_login
           in: path
-          description: |
-            <p>团队 Login</p>
+          description: 团队 Login
           required: true
           deprecated: false
           schema:
             type: string
         - name: book_slug
           in: path
-          description: |
-            <p>知识库路径</p>
+          description: 知识库路径
           required: true
           deprecated: false
           schema:
@@ -2865,106 +2964,63 @@ paths:
       tags:
         - doc
       summary: 更新目录
-      description: |
-        <p>更新目录<br />
-        PUT /api/v2/repos/:book_id/toc<br />
-        PUT /api/v2/repos/:group_login/:book_slug/toc</p>
-        <p>字段说明:</p>
-        <ul>
-        <li>所有场景
-        <ul>
-        <li>必填字段
-        <ul>
-        <li>action</li>
-        <li>action_mode</li>
-        </ul>
-        </li>
-        <li>选填字段
-        <ul>
-        <li>target_uuid</li>
-        <li>visible</li>
-        </ul>
-        </li>
-        </ul>
-        </li>
-        <li>创建场景
-        <ul>
-        <li>必填字段
-        <ul>
-        <li>创建文档节点
-        <ul>
-        <li>type</li>
-        <li>doc_ids</li>
-        </ul>
-        </li>
-        <li>创建分组节点
-        <ul>
-        <li>type</li>
-        <li>title</li>
-        </ul>
-        </li>
-        <li>创建外链节点
-        <ul>
-        <li>type</li>
-        <li>title</li>
-        <li>url</li>
-        <li>open_window</li>
-        </ul>
-        </li>
-        </ul>
-        </li>
-        </ul>
-        </li>
-        <li>移动场景
-        <ul>
-        <li>必填字段
-        <ul>
-        <li>target_uuid</li>
-        <li>node_uuid</li>
-        </ul>
-        </li>
-        </ul>
-        </li>
-        <li>编辑场景
-        <ul>
-        <li>必填字段
-        <ul>
-        <li>node_uuid</li>
-        </ul>
-        </li>
-        <li>选填字段
-        <ul>
-        <li>type</li>
-        <li>title</li>
-        <li>url</li>
-        <li>open_window</li>
-        </ul>
-        </li>
-        </ul>
-        </li>
-        <li>删除场景
-        <ul>
-        <li>必填字段
-        <ul>
-        <li>node_uuid</li>
-        </ul>
-        </li>
-        </ul>
-        </li>
-        </ul>
+      operationId: DOC/更新目录
+      description: |+
+        更新目录
+        PUT /api/v2/repos/:book_id/toc
+        PUT /api/v2/repos/:group_login/:book_slug/toc
+
+
+        字段说明:
+
+
+        - 所有场景
+          - 必填字段
+            - action
+            - action_mode
+          - 选填字段
+            - target_uuid
+            - visible
+        - 创建场景
+          - 必填字段
+            - 创建文档节点
+              - type
+              - doc_ids
+            - 创建分组节点
+              - type
+              - title
+            - 创建外链节点
+              - type
+              - title
+              - url
+              - open_window
+        - 移动场景
+          - 必填字段
+            - target_uuid
+            - node_uuid
+        - 编辑场景
+          - 必填字段
+            - node_uuid
+          - 选填字段
+            - type
+            - title
+            - url
+            - open_window
+        - 删除场景
+          - 必填字段
+            - node_uuid
+
       parameters:
         - name: group_login
           in: path
-          description: |
-            <p>团队 Login</p>
+          description: 团队 Login
           required: true
           deprecated: false
           schema:
             type: string
         - name: book_slug
           in: path
-          description: |
-            <p>知识库路径</p>
+          description: 知识库路径
           required: true
           deprecated: false
           schema:
@@ -2995,25 +3051,27 @@ paths:
       tags:
         - repo
       summary: 获取知识库列表
-      description: |
-        <p>获取知识库列表<br />
-        GET /api/v2/groups/:id/repos<br />
-        GET /api/v2/groups/:login/repos</p>
-        <p>GET /api/v2/users/:id/repos<br />
-        GET /api/v2/users/:login/repos</p>
+      operationId: REPO/获取知识库列表
+      description: |+
+        获取知识库列表
+        GET /api/v2/groups/:id/repos
+        GET /api/v2/groups/:login/repos
+
+
+        GET /api/v2/users/:id/repos
+        GET /api/v2/users/:login/repos
+
       parameters:
         - name: login
           in: path
-          description: |
-            <p>用户/团队的 Login 或 ID</p>
+          description: 用户/团队的 Login 或 ID
           required: true
           deprecated: false
           schema:
             type: string
         - name: offset
           in: query
-          description: |
-            <p>偏移量 [分页参数]</p>
+          description: 偏移量 [分页参数]
           required: false
           deprecated: false
           schema:
@@ -3021,8 +3079,7 @@ paths:
             default: 0
         - name: limit
           in: query
-          description: |
-            <p>每页数量 [分页参数]</p>
+          description: 每页数量 [分页参数]
           required: false
           deprecated: false
           schema:
@@ -3031,9 +3088,9 @@ paths:
             default: 100
         - name: type
           in: query
-          description: |
-            <p>类型 [筛选条件]<br />
-            (Book:文档型知识库, Design: 画板型知识库)</p>
+          description: |-
+            类型 [筛选条件]
+            (Book:文档型知识库, Design: 画板型知识库)
           required: false
           deprecated: false
           schema:
@@ -3064,17 +3121,20 @@ paths:
       tags:
         - repo
       summary: 创建知识库
-      description: |
-        <p>创建知识库<br />
-        POST /api/v2/groups/:id/repos<br />
-        POST /api/v2/groups/:login/repos</p>
-        <p>POST /api/v2/users/:id/repos<br />
-        POST /api/v2/users/:login/repos</p>
+      operationId: REPO/创建知识库
+      description: |+
+        创建知识库
+        POST /api/v2/groups/:id/repos
+        POST /api/v2/groups/:login/repos
+
+
+        POST /api/v2/users/:id/repos
+        POST /api/v2/users/:login/repos
+
       parameters:
         - name: login
           in: path
-          description: |
-            <p>用户/团队的 Login 或 ID</p>
+          description: 用户/团队的 Login 或 ID
           required: true
           deprecated: false
           schema:
@@ -3103,25 +3163,27 @@ paths:
       tags:
         - repo
       summary: 获取知识库列表
-      description: |
-        <p>获取知识库列表<br />
-        GET /api/v2/groups/:id/repos<br />
-        GET /api/v2/groups/:login/repos</p>
-        <p>GET /api/v2/users/:id/repos<br />
-        GET /api/v2/users/:login/repos</p>
+      operationId: REPO/获取知识库列表
+      description: |+
+        获取知识库列表
+        GET /api/v2/groups/:id/repos
+        GET /api/v2/groups/:login/repos
+
+
+        GET /api/v2/users/:id/repos
+        GET /api/v2/users/:login/repos
+
       parameters:
         - name: login
           in: path
-          description: |
-            <p>用户/团队的 Login 或 ID</p>
+          description: 用户/团队的 Login 或 ID
           required: true
           deprecated: false
           schema:
             type: string
         - name: offset
           in: query
-          description: |
-            <p>偏移量 [分页参数]</p>
+          description: 偏移量 [分页参数]
           required: false
           deprecated: false
           schema:
@@ -3129,8 +3191,7 @@ paths:
             default: 0
         - name: limit
           in: query
-          description: |
-            <p>每页数量 [分页参数]</p>
+          description: 每页数量 [分页参数]
           required: false
           deprecated: false
           schema:
@@ -3139,9 +3200,9 @@ paths:
             default: 100
         - name: type
           in: query
-          description: |
-            <p>类型 [筛选条件]<br />
-            (Book:文档型知识库, Design: 画板型知识库)</p>
+          description: |-
+            类型 [筛选条件]
+            (Book:文档型知识库, Design: 画板型知识库)
           required: false
           deprecated: false
           schema:
@@ -3172,17 +3233,20 @@ paths:
       tags:
         - repo
       summary: 创建知识库
-      description: |
-        <p>创建知识库<br />
-        POST /api/v2/groups/:id/repos<br />
-        POST /api/v2/groups/:login/repos</p>
-        <p>POST /api/v2/users/:id/repos<br />
-        POST /api/v2/users/:login/repos</p>
+      operationId: REPO/创建知识库
+      description: |+
+        创建知识库
+        POST /api/v2/groups/:id/repos
+        POST /api/v2/groups/:login/repos
+
+
+        POST /api/v2/users/:id/repos
+        POST /api/v2/users/:login/repos
+
       parameters:
         - name: login
           in: path
-          description: |
-            <p>用户/团队的 Login 或 ID</p>
+          description: 用户/团队的 Login 或 ID
           required: true
           deprecated: false
           schema:
@@ -3211,15 +3275,16 @@ paths:
       tags:
         - repo
       summary: 获取知识库详情
-      description: |
-        <p>获取知识库详情<br />
-        GET /api/v2/repos/:book_id<br />
-        GET /api/v2/repos/:group_login/:book_slug</p>
+      operationId: REPO/获取知识库详情
+      description: |+
+        获取知识库详情
+        GET /api/v2/repos/:book_id
+        GET /api/v2/repos/:group_login/:book_slug
+
       parameters:
         - name: book_id
           in: path
-          description: |
-            <p>知识库 ID</p>
+          description: 知识库 ID
           required: true
           deprecated: false
           schema:
@@ -3233,7 +3298,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/V2Book'
+                    $ref: '#/components/schemas/V2BookDetail'
         '400': *ref_0
         '401': *ref_1
         '403': *ref_2
@@ -3245,15 +3310,16 @@ paths:
       tags:
         - repo
       summary: 更新知识库
-      description: |
-        <p>更新知识库<br />
-        PUT /api/v2/repos/:book_id<br />
-        PUT /api/v2/repos/:group_login/:book_slug</p>
+      operationId: REPO/更新知识库
+      description: |+
+        更新知识库
+        PUT /api/v2/repos/:book_id
+        PUT /api/v2/repos/:group_login/:book_slug
+
       parameters:
         - name: book_id
           in: path
-          description: |
-            <p>知识库 ID</p>
+          description: 知识库 ID
           required: true
           deprecated: false
           schema:
@@ -3281,15 +3347,16 @@ paths:
       tags:
         - repo
       summary: 删除知识库
-      description: |
-        <p>删除知识库<br />
-        DELETE /api/v2/repos/:book_id<br />
-        DELETE /api/v2/repos/:group_login/:book_slug</p>
+      operationId: REPO/删除知识库
+      description: |+
+        删除知识库
+        DELETE /api/v2/repos/:book_id
+        DELETE /api/v2/repos/:group_login/:book_slug
+
       parameters:
         - name: book_id
           in: path
-          description: |
-            <p>知识库 ID</p>
+          description: 知识库 ID
           required: true
           deprecated: false
           schema:
@@ -3316,23 +3383,23 @@ paths:
       tags:
         - repo
       summary: 获取知识库详情
-      description: |
-        <p>获取知识库详情<br />
-        GET /api/v2/repos/:book_id<br />
-        GET /api/v2/repos/:group_login/:book_slug</p>
+      operationId: REPO/获取知识库详情
+      description: |+
+        获取知识库详情
+        GET /api/v2/repos/:book_id
+        GET /api/v2/repos/:group_login/:book_slug
+
       parameters:
         - name: group_login
           in: path
-          description: |
-            <p>团队 Login</p>
+          description: 团队 Login
           required: true
           deprecated: false
           schema:
             type: string
         - name: book_slug
           in: path
-          description: |
-            <p>知识库路径</p>
+          description: 知识库路径
           required: true
           deprecated: false
           schema:
@@ -3346,7 +3413,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/V2Book'
+                    $ref: '#/components/schemas/V2BookDetail'
         '400': *ref_0
         '401': *ref_1
         '403': *ref_2
@@ -3358,23 +3425,23 @@ paths:
       tags:
         - repo
       summary: 更新知识库
-      description: |
-        <p>更新知识库<br />
-        PUT /api/v2/repos/:book_id<br />
-        PUT /api/v2/repos/:group_login/:book_slug</p>
+      operationId: REPO/更新知识库
+      description: |+
+        更新知识库
+        PUT /api/v2/repos/:book_id
+        PUT /api/v2/repos/:group_login/:book_slug
+
       parameters:
         - name: group_login
           in: path
-          description: |
-            <p>团队 Login</p>
+          description: 团队 Login
           required: true
           deprecated: false
           schema:
             type: string
         - name: book_slug
           in: path
-          description: |
-            <p>知识库路径</p>
+          description: 知识库路径
           required: true
           deprecated: false
           schema:
@@ -3402,23 +3469,23 @@ paths:
       tags:
         - repo
       summary: 删除知识库
-      description: |
-        <p>删除知识库<br />
-        DELETE /api/v2/repos/:book_id<br />
-        DELETE /api/v2/repos/:group_login/:book_slug</p>
+      operationId: REPO/删除知识库
+      description: |+
+        删除知识库
+        DELETE /api/v2/repos/:book_id
+        DELETE /api/v2/repos/:group_login/:book_slug
+
       parameters:
         - name: group_login
           in: path
-          description: |
-            <p>团队 Login</p>
+          description: 团队 Login
           required: true
           deprecated: false
           schema:
             type: string
         - name: book_slug
           in: path
-          description: |
-            <p>知识库路径</p>
+          description: 知识库路径
           required: true
           deprecated: false
           schema:
@@ -3445,14 +3512,15 @@ paths:
       tags:
         - statistic
       summary: 团队.汇总统计数据
-      description: |
-        <p>团队.汇总统计数据<br />
-        GET /api/v2/groups/:login/statistics</p>
+      operationId: STATISTIC/团队.汇总统计数据
+      description: |+
+        团队.汇总统计数据
+        GET /api/v2/groups/:login/statistics
+
       parameters:
         - name: login
           in: path
-          description: |
-            <p>团队的 Login 或 ID</p>
+          description: 团队的 Login 或 ID
           required: true
           deprecated: false
           schema:
@@ -3479,31 +3547,30 @@ paths:
       tags:
         - statistic
       summary: 团队.成员统计数据
-      description: |
-        <p>团队.成员统计数据<br />
-        GET /api/v2/groups/:login/statistics/members</p>
+      operationId: STATISTIC/团队.成员统计数据
+      description: |-
+        团队.成员统计数据
+        GET /api/v2/groups/:login/statistics/members
       parameters:
         - name: login
           in: path
-          description: |
-            <p>团队的 Login 或 ID</p>
+          description: 团队的 Login 或 ID
           required: true
           deprecated: false
           schema:
             type: string
         - name: name
           in: query
-          description: |
-            <p>成员名 [过滤条件]</p>
+          description: 成员名 [过滤条件]
           required: false
           deprecated: false
           schema:
             type: string
         - name: range
           in: query
-          description: |
-            <p>时间范围 [过滤条件]<br />
-            (0:全部, 30:近 30 天, 365:近一年)</p>
+          description: |-
+            时间范围 [过滤条件]
+            (0:全部, 30:近 30 天, 365:近一年)
           required: false
           deprecated: false
           schema:
@@ -3515,8 +3582,7 @@ paths:
             default: 0
         - name: page
           in: query
-          description: |
-            <p>页码</p>
+          description: 页码
           required: false
           deprecated: false
           schema:
@@ -3524,8 +3590,7 @@ paths:
             default: 1
         - name: limit
           in: query
-          description: |
-            <p>分页数量</p>
+          description: 分页数量
           required: false
           deprecated: false
           schema:
@@ -3534,8 +3599,7 @@ paths:
             default: 10
         - name: sortField
           in: query
-          description: |
-            <p>排序字段</p>
+          description: 排序字段
           required: false
           deprecated: false
           schema:
@@ -3547,8 +3611,7 @@ paths:
               - like_count
         - name: sortOrder
           in: query
-          description: |
-            <p>排序方向</p>
+          description: 排序方向
           required: false
           deprecated: false
           schema:
@@ -3585,31 +3648,30 @@ paths:
       tags:
         - statistic
       summary: 团队.知识库统计数据
-      description: |
-        <p>团队.知识库统计数据<br />
-        GET /api/v2/groups/:login/statistics/books</p>
+      operationId: STATISTIC/团队.知识库统计数据
+      description: |-
+        团队.知识库统计数据
+        GET /api/v2/groups/:login/statistics/books
       parameters:
         - name: login
           in: path
-          description: |
-            <p>团队的 Login 或 ID</p>
+          description: 团队的 Login 或 ID
           required: true
           deprecated: false
           schema:
             type: string
         - name: name
           in: query
-          description: |
-            <p>知识库名 [过滤条件]</p>
+          description: 知识库名 [过滤条件]
           required: false
           deprecated: false
           schema:
             type: string
         - name: range
           in: query
-          description: |
-            <p>时间范围 [过滤条件]<br />
-            (0:全部, 30:近 30 天, 365:近一年)</p>
+          description: |-
+            时间范围 [过滤条件]
+            (0:全部, 30:近 30 天, 365:近一年)
           required: false
           deprecated: false
           schema:
@@ -3621,8 +3683,7 @@ paths:
             default: 0
         - name: page
           in: query
-          description: |
-            <p>页码</p>
+          description: 页码
           required: false
           deprecated: false
           schema:
@@ -3630,8 +3691,7 @@ paths:
             default: 1
         - name: limit
           in: query
-          description: |
-            <p>分页数量</p>
+          description: 分页数量
           required: false
           deprecated: false
           schema:
@@ -3640,8 +3700,7 @@ paths:
             default: 10
         - name: sortField
           in: query
-          description: |
-            <p>排序字段</p>
+          description: 排序字段
           required: false
           deprecated: false
           schema:
@@ -3656,8 +3715,7 @@ paths:
               - comment_count
         - name: sortOrder
           in: query
-          description: |
-            <p>排序方向</p>
+          description: 排序方向
           required: false
           deprecated: false
           schema:
@@ -3694,39 +3752,37 @@ paths:
       tags:
         - statistic
       summary: 团队.文档统计数据
-      description: |
-        <p>团队.文档统计数据<br />
-        GET /api/v2/groups/:login/statistics/docs</p>
+      operationId: STATISTIC/团队.文档统计数据
+      description: |-
+        团队.文档统计数据
+        GET /api/v2/groups/:login/statistics/docs
       parameters:
         - name: login
           in: path
-          description: |
-            <p>团队的 Login 或 ID</p>
+          description: 团队的 Login 或 ID
           required: true
           deprecated: false
           schema:
             type: string
         - name: bookId
           in: query
-          description: |
-            <p>指定知识库 [过滤条件]</p>
+          description: 指定知识库 [过滤条件]
           required: false
           deprecated: false
           schema:
             type: integer
         - name: name
           in: query
-          description: |
-            <p>文档名 [过滤条件]</p>
+          description: 文档名 [过滤条件]
           required: false
           deprecated: false
           schema:
             type: string
         - name: range
           in: query
-          description: |
-            <p>时间范围 [过滤条件]<br />
-            (0:全部, 30:近 30 天, 365:近一年)</p>
+          description: |-
+            时间范围 [过滤条件]
+            (0:全部, 30:近 30 天, 365:近一年)
           required: false
           deprecated: false
           schema:
@@ -3738,8 +3794,7 @@ paths:
             default: 0
         - name: page
           in: query
-          description: |
-            <p>页码</p>
+          description: 页码
           required: false
           deprecated: false
           schema:
@@ -3747,8 +3802,7 @@ paths:
             default: 1
         - name: limit
           in: query
-          description: |
-            <p>分页数量</p>
+          description: 分页数量
           required: false
           deprecated: false
           schema:
@@ -3757,8 +3811,7 @@ paths:
             default: 10
         - name: sortField
           in: query
-          description: |
-            <p>排序字段</p>
+          description: 排序字段
           required: false
           deprecated: false
           schema:
@@ -3772,8 +3825,7 @@ paths:
               - created_at
         - name: sortOrder
           in: query
-          description: |
-            <p>排序方向</p>
+          description: 排序方向
           required: false
           deprecated: false
           schema:
@@ -3805,3 +3857,10 @@ paths:
         '422': *ref_4
         '429': *ref_5
         '500': *ref_6
+tags:
+  - name: user
+  - name: search
+  - name: group
+  - name: doc
+  - name: repo
+  - name: statistic

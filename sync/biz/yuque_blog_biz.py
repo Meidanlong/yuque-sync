@@ -5,7 +5,7 @@ import yaml
 
 from sync.domain.constant.contants import DATE_FORMAT
 from sync.domain.doc_detail import DocDetail
-from sync.service.yuque_service import get_yuque_doc, get_yuque_repo
+from sync.service.yuque_service import get_yuque_doc, get_yuque_repo, get_yuque_book_toc
 
 
 def get_yuque_published_docs(exclude_books: List[str]) -> dict:
@@ -27,7 +27,7 @@ def get_yuque_published_docs(exclude_books: List[str]) -> dict:
         if book['public'] == 0:
             continue
         # 获取目录
-        doc_contents = yaml.load(book['toc_yml'], Loader=yaml.FullLoader)
+        doc_contents = get_yuque_book_toc(book_id)
         for doc in doc_contents:
             if doc['type'] == 'META':
                 continue

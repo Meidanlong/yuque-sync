@@ -3,7 +3,7 @@ import json
 import requests
 
 from sync.domain.constant.contants import GET_REPO_LIST_URL, GET_BOOK_LIST_URL, GET_DOC_DETAIL_URL, GET_USR_URL, \
-    YUQUE_ACCESS_TOKEN
+    YUQUE_ACCESS_TOKEN, GET_BOOK_TOC_URL
 
 
 def get_yuque_repo():
@@ -18,6 +18,11 @@ def get_yuque_book(book_id: int):
     url = GET_BOOK_LIST_URL.format(book_id=book_id)
     params = {'offset': 0, 'limit': 100}
     return request_yuque(url, params)
+
+
+def get_yuque_book_toc(book_id: int):
+    url = GET_BOOK_TOC_URL.format(book_id=book_id)
+    return request_yuque(url, None)
 
 
 def get_yuque_doc(book_id: int, doc_id: str):

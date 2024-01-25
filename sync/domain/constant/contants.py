@@ -11,6 +11,7 @@ TARGET_DIR = os.path.join('content', 'posts')
 
 # 请求
 GET_REPO_LIST_URL = 'https://www.yuque.com/api/v2/users/{login}/repos'
+GET_BOOK_TOC_URL = 'https://www.yuque.com/api/v2/repos/{book_id}/toc'
 GET_BOOK_LIST_URL = 'https://www.yuque.com/api/v2/repos/{book_id}/docs'
 GET_DOC_DETAIL_URL = 'https://www.yuque.com/api/v2/repos/{book_id}/docs/{id}'
 GET_USR_URL = 'https://www.yuque.com/api/v2/user'
