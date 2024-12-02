@@ -11,6 +11,7 @@ overview_format = '''\
 ---
 {overview_yml}
 ---
+# {blog_title}
 {blog_content}
 '''
 
@@ -90,7 +91,8 @@ def upsert_local_doc(doc_detail: DocDetail):
         # 删除对象的属性
         delattr(doc_detail, 'content')
     overview_yml = del_yml_useless_line(yaml.dump(data=doc_detail, allow_unicode=True))
-    all_blog_content = overview_format.format(overview_yml=overview_yml, blog_content=doc_content)
+    all_blog_content = overview_format.format(overview_yml=overview_yml, blog_title=doc_detail.title,
+                                              blog_content=doc_content)
     # 2、生成本地博客文件
     content_path = get_content_posts_path()
     # 特殊处理：文件目录中有'/'替换为空格，否则会找不到路径

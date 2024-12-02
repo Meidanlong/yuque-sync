@@ -2,8 +2,9 @@ import json
 
 import requests
 
-from sync.domain.constant.contants import GET_REPO_LIST_URL, GET_BOOK_LIST_URL, GET_DOC_DETAIL_URL, GET_USR_URL, GET_BOOK_TOC_URL
-from sync.domain.constant.private_data import YUQUE_ACCESS_TOKEN
+from sync.domain.constant.contants import GET_REPO_LIST_URL, GET_BOOK_LIST_URL, GET_DOC_DETAIL_URL, GET_USR_URL, \
+    GET_BOOK_TOC_URL
+from sync.domain.constant.private_data import get_yuque_access_token
 
 
 def get_yuque_repo():
@@ -35,6 +36,6 @@ def get_yuque_user():
 
 
 def request_yuque(url: str, params: {}):
-    headers = {'accept': 'application/json', 'X-Auth-Token': YUQUE_ACCESS_TOKEN}
+    headers = {'accept': 'application/json', 'X-Auth-Token': get_yuque_access_token()}
     res = requests.get(url=url, headers=headers, params=params)
     return json.loads(res.text)['data']

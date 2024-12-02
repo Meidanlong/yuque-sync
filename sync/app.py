@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+
 from sync.biz.sync_docs_biz import compare_and_update_docs
 from sync.biz.yuque_blog_biz import get_yuque_published_docs
 from sync.domain.constant.private_data import INCLUDE_BOOKS
@@ -9,4 +11,5 @@ def yuque_sync():
 
 
 if __name__ == '__main__':
+    load_dotenv()
     yuque_sync()
