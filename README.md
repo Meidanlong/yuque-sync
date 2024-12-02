@@ -20,9 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      YUQUE_ACCESS_TOKEN: ${{ secrets.YUQUE_ACCESS_TOKEN }}
-      YUQUE_LOGIN: ${{ secrets.YUQUE_LOGIN }}
-      INCLUDE_BOOKS: ${{ secrets.INCLUDE_BOOKS }}
+      YUQUE_ACCESS_TOKEN: 
+      OAUTH_CLIENT_ID: 
+      OAUTH_CLIENT_SECRET: 
 
     steps:
     - name: Checkout repository
