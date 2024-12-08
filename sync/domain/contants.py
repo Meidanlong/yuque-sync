@@ -16,3 +16,11 @@ GET_BOOK_LIST_URL = 'https://www.yuque.com/api/v2/repos/{book_id}/docs'
 GET_DOC_DETAIL_URL = 'https://www.yuque.com/api/v2/repos/{book_id}/docs/{id}'
 GET_USR_URL = 'https://www.yuque.com/api/v2/user'
 
+# 语雀环境
+YUQUE_LOGIN = 'meidanlong'
+INCLUDE_BOOKS = ['博客专栏']
+
+
+# 密钥
+def get_yuque_access_token():
+    return os.getenv('YUQUE_ACCESS_TOKEN')

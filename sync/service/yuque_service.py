@@ -2,9 +2,8 @@ import json
 
 import requests
 
-from sync.domain.constant.contants import GET_REPO_LIST_URL, GET_BOOK_LIST_URL, GET_DOC_DETAIL_URL, GET_USR_URL, \
-    GET_BOOK_TOC_URL
-from sync.domain.constant.private_data import get_yuque_access_token
+from sync.domain.contants import GET_REPO_LIST_URL, GET_BOOK_LIST_URL, GET_DOC_DETAIL_URL, GET_USR_URL, \
+    GET_BOOK_TOC_URL, get_yuque_access_token
 
 
 def get_yuque_repo():

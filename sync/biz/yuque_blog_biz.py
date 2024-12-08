@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List
 
-from sync.domain.constant.contants import DATE_FORMAT
+from sync.domain.contants import DATE_FORMAT
 from sync.domain.doc_detail import DocDetail
 from sync.service.yuque_service import get_yuque_doc, get_yuque_repo, get_yuque_book_toc
 

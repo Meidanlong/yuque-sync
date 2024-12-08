@@ -2,7 +2,7 @@ import os
 
 import yaml
 
-from sync.domain.constant.contants import OS_SEP
+from sync.domain.contants import OS_SEP
 from sync.domain.doc_detail import DocDetail
 
 overview_tag = '---'
